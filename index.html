@@ -3,343 +3,590 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Yen Tran — Product</title>
-<meta name="description" content="Product portfolio: Approvy case study, lead-qualification chatbot, personal expense app.">
+<title>Yen Tran | Product</title>
+<meta name="description" content="Yen Tran, product manager. Case studies: a personal expense app, Approvy (a product case study) and a lead qualification chatbot.">
+<meta name="theme-color" content="#fdfcf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0e0d0b" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="assets/me/avatar.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yen Tran | Product manager">
+<meta property="og:description" content="Yen Tran, product manager. Case studies: a personal expense app, Approvy (a product case study) and a lead qualification chatbot.">
+<meta property="og:image" content="assets/me/avatar.png">
+<meta property="og:image:alt" content="Illustrated portrait of Yen Tran">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yen Tran | Product manager">
+<meta name="twitter:description" content="Yen Tran, product manager. Case studies: a personal expense app, Approvy (a product case study) and a lead qualification chatbot.">
+<meta name="twitter:image" content="assets/me/avatar.png">
 <style>
+/* ============================================================
+   Design tokens
+   1. Primitives: raw palette values, named by hue + OKLCH lightness.
+      Never used directly by components.
+   2. Semantic roles: what components use. Each color role holds its
+      light and dark value in one place via light-dark().
+   ============================================================ */
 :root{
-  --ground:#ffffff;
-  --sand:#eeeeee;
-  --ink:#333333;
-  --muted:#4f4f4f;
-  --forest:#1020cc;
-  --clay:#1020cc;
-  --hairline:#3333331f;
-  --c-green:#1f9d55;
-  --c-blue:#1020cc;
-  --c-amber:#b45309;
-  color-scheme:light;
+  color-scheme:light dark;
 
-  /* spacing scale */
-  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
-  --space-5:20px; --space-6:24px; --space-7:32px; --space-8:40px; --space-9:48px;
+  /* ---- 1. primitives: Edhas palette in OKLCH (source: Edhas tokens.css / DESIGN.md) ---- */
+  /* Edhas hues kept; ink and white tinted toward a warm neutral (hue 80) instead of pure #000/#fff */
+  --edhas-ground:oklch(96.5% .004 80);
+  --edhas-ink:oklch(16% .005 80);
+  --edhas-paper:oklch(99% .003 80);
+  --edhas-blue:oklch(41.1% .265 270);
+  --edhas-periwinkle:oklch(56.6% .216 272);
+  --edhas-pink:oklch(66.2% .237 332);
+  --edhas-cyan:oklch(83.9% .115 199);
+  --edhas-mist:oklch(87.3% .04 194);
+  --edhas-indigo:oklch(31.8% .181 276);
+  /* derived (not Edhas values): one neutral curve at the ground's hue, plus adjusted accents */
+  --neutral-44:oklch(44% .005 80);
+  --neutral-50:oklch(50% .005 80);
+  --neutral-68:oklch(68% .005 80);
+  --neutral-78:oklch(78% .005 80);
+  --periwinkle-72:oklch(72% .15 272);
 
-  /* radius scale */
-  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-pill:999px;
+  /* ---- 2. semantic color roles: light-dark(light, dark) ---- */
+  --color-bg:light-dark(var(--edhas-paper), var(--edhas-ink)); /* light: Edhas surface-white, tinted */
+  --color-text:light-dark(var(--edhas-ink), var(--edhas-paper));
+  --color-text-muted:light-dark(var(--neutral-44), var(--neutral-78));
+  --color-text-subtle:light-dark(var(--neutral-50), var(--neutral-68));
+  --color-border:light-dark(oklch(16% .005 80 / .14), oklch(99% .003 80 / .16));
+  --color-accent:light-dark(var(--edhas-blue), var(--periwinkle-72));
+  --color-highlight:light-dark(var(--edhas-periwinkle), var(--periwinkle-72));
+  --color-case-approvy:light-dark(oklch(48% .238 298), oklch(72% .17 298)); /* Approvy logo purple */
+  --color-case-chatbot:var(--color-accent);
+  --color-case-expense:light-dark(oklch(50.8% .118 165.6), oklch(77.3% .153 163.2)); /* expense app's emerald accent */
+    --color-avatar-bg:light-dark(transparent, var(--edhas-paper));
+  /* image viewer sits on a fixed dark scrim in both themes */
+  --color-overlay:oklch(14% .005 90 / .9);
+  --color-on-overlay:oklch(96% .005 270);
+  --color-overlay-control:oklch(100% 0 0 / .12);
 
-  /* type scale */
-  --text-2xs:.76rem; --text-xs:.8rem; --text-sm:.86rem; --text-base:1.03rem;
-  --text-md:1.08rem; --text-lg:1.25rem; --text-xl:1.7rem;
+  /* ---- typography ---- */
+  --font-display:'PT Serif',Georgia,serif;
+  /* Edhas body face is Helios (Canva, unlicensed here); Schibsted Grotesk is the loaded stand-in */
+  --font-body:Helios,'Schibsted Grotesk','Helvetica Neue',sans-serif;
+  --text-xs:.85rem; --text-base:1.0625rem; --text-md:1.33rem; --text-lg:1.66rem;
+  --text-quote:clamp(1.25rem,2.4vw,1.55rem);
+  --text-headline:clamp(1.9rem,4.6vw,2.6rem);
+  --text-title:clamp(2rem,5.5vw,3.1rem);
+  --text-display:clamp(2.6rem,7vw,4.2rem);
+  --weight-display:400; --weight-medium:400; --weight-semibold:600; --weight-bold:700;
+  --leading-tight:1.04; --leading-snug:1.2; --leading-quote:1.5; --leading-body:1.7;
+  --tracking-tight:-.023em; --tracking-snug:-.023em; --tracking-label:.06em; --tracking-wide:.12em; --tracking-button:.08em;
+
+  /* ---- space ---- */
+  --gap-hair:4px; --gap-inline:8px; --gap-snug:12px; --gap-stack:16px;
+  --gap-group:24px; --gap-block:32px; --gap-section:48px;
+  --gutter:16px;
+
+  /* ---- shape ---- */
+  /* Edhas: pills only; photos and cards stay square */
+  --radius-sm:0; --radius-md:0; --radius-pill:9999px; --radius-round:50%;
+  --border-thin:1px solid var(--color-border);
+  --focus-ring:2px solid var(--color-accent);
+
+  /* ---- layout ---- */
+  --width-page:1360px; --width-case:976px; /* toc 220 + gap 48 + text column 708, so no empty strip right of the text */ --width-narrow:720px; --width-toc:220px;
+  --measure:68ch; --measure-quote:60ch;
+
+  /* ---- motion ---- */
+  --dur-fast:.15s; --dur-base:.2s; --dur-medium:.3s; --dur-slow:.5s; --dur-draw:1.1s;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-in-out:cubic-bezier(.65,0,.35,1);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --ground:#1a1a1a;
-    --sand:#262626;
-    --ink:#eeeeee;
-    --muted:#b3b3b3;
-    --forest:#7b8cff;
-    --clay:#7b8cff;
-    --hairline:#eeeeee26;
-    --c-green:#34d399;
-    --c-blue:#7b8cff;
-    --c-amber:#fbbf24;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --ground:#1a1a1a;
-  --sand:#262626;
-  --ink:#eeeeee;
-  --muted:#b3b3b3;
-  --forest:#7b8cff;
-  --clay:#7b8cff;
-  --hairline:#eeeeee26;
-  --c-green:#34d399;
-  --c-blue:#7b8cff;
-  --c-amber:#fbbf24;
-  color-scheme:dark;
-}
+:root[data-theme="light"]{color-scheme:light;}
+:root[data-theme="dark"]{color-scheme:dark;}
+
+@keyframes riseIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 
 *{box-sizing:border-box;}
+html{scroll-padding-top:calc(var(--header-h, 82px) + 56px);scrollbar-width:none;}
+html::-webkit-scrollbar,.toc::-webkit-scrollbar{display:none;}
 body{
   margin:0;
-  background:var(--ground);
-  color:var(--ink);
-  font-family:'Public Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  padding:0 max(16px, env(safe-area-inset-left,0px)) 0 max(16px, env(safe-area-inset-right,0px));
+  background:var(--color-bg);
+  color:var(--color-text);
+  font-family:var(--font-body);
+  font-size:var(--text-base);
+  padding:0 max(var(--gutter), env(safe-area-inset-left,0px)) 0 max(var(--gutter), env(safe-area-inset-right,0px));
 }
-.mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
-.wrap{max-width:1360px;margin:0 auto;}
-.home-inner{max-width:640px;}
-a{color:var(--forest);text-decoration:none;}
+.wrap{max-width:var(--width-page);margin:0 auto;}
+.home-inner{max-width:var(--width-narrow);margin:0 auto;}
+a{color:var(--color-accent);text-decoration:none;}
+:focus-visible{outline:var(--focus-ring);outline-offset:2px;}
 a:hover{text-decoration:underline;}
 [hidden]{display:none!important;}
 
 /* header (shared) */
+.skip-link{position:absolute;left:var(--gap-stack);top:-120px;z-index:60;background:var(--color-text);color:var(--color-bg);border-radius:var(--radius-pill);padding:var(--gap-inline) var(--gap-stack);font-size:var(--text-xs);font-weight:var(--weight-semibold);}
+.skip-link:focus{top:var(--gap-inline);text-decoration:none;}
+main:focus{outline:none;}
 header.topbar{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);
-  padding-block:var(--space-6);border-bottom:1px solid var(--hairline);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--gap-snug);
+  padding-block:var(--gap-group);padding-inline:max(0px, calc((100% - var(--page-w, var(--width-case))) / 2));border-bottom:var(--border-thin);
+  position:sticky;top:0;z-index:50;background:var(--color-bg);
 }
-.icon-links{display:flex;gap:var(--space-4);align-items:center;}
-.icon-links a{font-size:var(--text-xs);font-weight:600;color:var(--muted);}
-.icon-links a:hover{color:var(--ink);}
-.topbar .right{display:flex;align-items:center;gap:var(--space-3);}
+.icon-links{display:flex;gap:var(--gap-stack);align-items:center;}
+.icon-links a{font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text-muted);}
+.icon-links a:hover{color:var(--color-text);}
+body:has(#page-home:not([hidden])) .nav-book{display:none;}
+.topbar .right{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gap-snug);min-width:0;}
 .cv-chip{
-  font-family:'JetBrains Mono',monospace;font-size:var(--text-xs);letter-spacing:.02em;
-  background:var(--ink);color:var(--ground);border-radius:var(--radius-pill);padding:var(--space-2) var(--space-4);font-weight:600;
+  font-size:var(--text-xs);font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:var(--tracking-button);
+  background:var(--color-text);color:var(--color-bg);border-radius:var(--radius-pill);padding:var(--gap-inline) var(--gap-stack);
 }
 .cv-chip:hover{opacity:.85;text-decoration:none;}
-.email-link{font-family:'JetBrains Mono',monospace;font-size:var(--text-xs);letter-spacing:.02em;color:var(--muted);text-transform:uppercase;}
+.email-link{font-size:var(--text-xs);color:var(--color-text-muted);overflow-wrap:anywhere;min-width:0;}
+
+/* closing call to action */
+.cta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--gap-group);padding-block:var(--gap-block) var(--gap-block);}
+.cta-line{font-family:var(--font-display);font-weight:var(--weight-display);font-size:var(--text-headline);letter-spacing:var(--tracking-snug);line-height:1.15;margin:0;color:var(--color-text);}
+.cta-link{font-size:var(--text-xs);font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:var(--tracking-button);color:var(--color-bg);background:var(--color-text);border-radius:var(--radius-pill);padding:var(--gap-inline) var(--gap-group);white-space:nowrap;}
+.cta-link:hover{opacity:.85;text-decoration:none;}
+.cta-link:focus-visible{outline:var(--focus-ring);outline-offset:3px;}
+.circled{position:relative;display:inline-block;padding:0 .1em;margin-inline:.3em;}
+.circled svg{position:absolute;left:-14%;top:-30%;width:128%;height:160%;overflow:visible;pointer-events:none;fill:none;stroke:var(--color-highlight);stroke-width:3;stroke-linecap:round;}
+.draw{stroke-dasharray:1;stroke-dashoffset:0;animation:draw var(--dur-draw) var(--ease-in-out) .2s backwards paused;}
+.cta.in-view .draw{animation-play-state:running;}
+@keyframes draw{from{stroke-dashoffset:1;}}
 
 /* bio */
-.bio{display:flex;align-items:center;gap:var(--space-4);padding-block:var(--space-9) var(--space-2);}
-.avatar{
-  width:64px;height:64px;border-radius:50%;background:var(--sand);
-  display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;
-  font-size:1.3rem;color:var(--forest);flex-shrink:0;
+.bio{padding-block:var(--gap-section) 0;animation:riseIn var(--dur-slow) var(--ease-out) backwards;}
+.bio{display:flex;align-items:center;gap:var(--gap-group);}
+.me{width:120px;height:120px;flex-shrink:0;animation:popIn var(--dur-slow) var(--ease-out) .2s backwards;transition:transform var(--dur-medium) var(--ease-out);}
+.me:hover{transform:rotate(-6deg) scale(1.04);}
+.me{background:var(--color-avatar-bg);border-radius:var(--radius-round);}
+@keyframes popIn{from{opacity:0;transform:scale(.85);}}
+@media (max-width:520px){.me{width:88px;height:88px;}}
+.bio > div{display:flex;flex-direction:column;gap:var(--gap-snug);}
+.bio > div > .name{line-height:.9;margin-left:-.04em;} /* trim leading so title sits under the baseline; optical align of the serif Y */
+.bio .title{
+  font-size:var(--text-xs);color:var(--color-text);font-weight:var(--weight-bold);
+  text-transform:uppercase;letter-spacing:var(--tracking-wide);margin:0;
 }
-.bio .name{font-family:'Newsreader',Georgia,serif;font-size:var(--text-xl);font-weight:400;margin:0 0 2px;letter-spacing:-.01em;}
-.bio .title{font-family:'JetBrains Mono',monospace;font-size:var(--text-xs);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.bio .name{
+  font-family:var(--font-display);font-size:var(--text-display);font-weight:var(--weight-display);
+  margin:0;letter-spacing:var(--tracking-tight);line-height:var(--leading-tight);color:var(--color-text);
+}
 
 /* about */
-section.about{max-width:56ch;padding-block:var(--space-4) var(--space-8);}
-section.about p{font-size:var(--text-md);line-height:1.7;color:var(--muted);margin:0;}
-section.about .bubble{
-  background:var(--sand);color:var(--clay);border-radius:var(--radius-sm);padding:1px var(--space-2);font-weight:600;
+section.about{max-width:var(--measure-quote);padding-block:var(--gap-group) 0;
+  animation:riseIn var(--dur-slow) var(--ease-out) .08s backwards;
 }
+section.about p{font-family:var(--font-display);font-style:italic;font-size:var(--text-quote);line-height:var(--leading-quote);color:var(--color-text);margin:0;}
 
 /* cases list */
-section.cases{padding-block:var(--space-2) var(--space-5);}
+section.cases{padding-block:var(--gap-section) 0;}
 section.cases > .label{
-  font-family:'JetBrains Mono',monospace;font-size:var(--text-2xs);color:var(--muted);text-transform:uppercase;
-  letter-spacing:.06em;margin-bottom:var(--space-1);
+  font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text-muted);text-transform:uppercase;
+  letter-spacing:var(--tracking-label);margin-bottom:var(--gap-inline);
 }
 a.case-row{
-  display:grid;grid-template-columns:38px 1fr auto;gap:var(--space-4);align-items:start;
-  padding-block:var(--space-5);border-top:1px solid var(--hairline);color:inherit;
+  display:grid;grid-template-columns:36px 20px minmax(0,1fr);gap:var(--gap-stack);align-items:center;
+  padding:var(--gap-stack) var(--gap-snug);margin:0 calc(var(--gap-snug) * -1);color:inherit;
+  border-radius:var(--radius-md);
+  animation:riseIn var(--dur-slow) var(--ease-out) backwards;
 }
+a.case-row:nth-of-type(1){animation-delay:.14s;}
+a.case-row:nth-of-type(2){animation-delay:.2s;}
+a.case-row:nth-of-type(3){animation-delay:.26s;}
 a.case-row:hover{text-decoration:none;}
-a.case-row:hover .title{color:var(--forest);}
-section.cases a.case-row:last-child{border-bottom:1px solid var(--hairline);}
-.case-icon{
-  width:38px;height:38px;border-radius:var(--radius-md);background:var(--sand);
-  display:flex;align-items:center;justify-content:center;font-size:1rem;
+a.case-row:has(.ci-green){--case-color:var(--color-case-approvy);}
+a.case-row:has(.ci-blue){--case-color:var(--color-case-chatbot);}
+a.case-row:has(.ci-amber){--case-color:var(--color-case-expense);}
+a.case-row:hover .title{color:var(--case-color, var(--color-accent));text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em;}
+a.case-row:hover .case-num{color:var(--case-color, var(--color-accent));}
+.case-num{
+  font-family:var(--font-display);font-style:italic;font-size:var(--text-lg);color:var(--color-text-subtle);
+  font-variant-numeric:lining-nums tabular-nums;transition:color var(--dur-base);
 }
-.case-icon svg{width:18px;height:18px;flex-shrink:0;}
-.case-icon.ci-green svg{color:var(--c-green);}
-.case-icon.ci-blue svg{color:var(--c-blue);}
-.case-icon.ci-amber svg{color:var(--c-amber);}
-.case-icon.ci-green{background:color-mix(in srgb, var(--c-green) 18%, var(--sand));}
-.case-icon.ci-blue{background:color-mix(in srgb, var(--c-blue) 18%, var(--sand));}
-.case-icon.ci-amber{background:color-mix(in srgb, var(--c-amber) 20%, var(--sand));}
-a.case-row .title{font-family:'Newsreader',Georgia,serif;font-size:var(--text-lg);font-weight:400;margin:0 0 4px;color:var(--ink);}
-a.case-row .meta{font-family:'JetBrains Mono',monospace;font-size:var(--text-xs);color:var(--muted);}
-a.case-row .arrow{font-family:'JetBrains Mono',monospace;color:var(--muted);align-self:center;}
+.case-icon{display:flex;align-items:center;justify-content:center;}
+.case-icon svg{width:20px;height:20px;flex-shrink:0;}
+.case-icon.ci-green svg{color:var(--color-case-approvy);}
+.case-icon.ci-blue svg{color:var(--color-case-chatbot);}
+.case-icon.ci-amber svg{color:var(--color-case-expense);}
+a.case-row .title{font-family:var(--font-display);font-size:var(--text-lg);font-weight:var(--weight-display);line-height:var(--leading-snug);margin:0 0 var(--gap-hair);color:var(--color-text);transition:color var(--dur-base);}
+a.case-row .title,a.case-row .meta{overflow-wrap:anywhere;}
+a.case-row .meta{font-size:var(--text-xs);color:var(--color-text-muted);margin:0;}
 
 /* footer (shared) */
-footer{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3);
-  padding-block:var(--space-7) var(--space-9);border-top:1px solid var(--hairline);margin-top:var(--space-5);
-}
-footer .owner{font-family:'JetBrains Mono',monospace;font-size:var(--text-xs);color:var(--muted);text-transform:uppercase;letter-spacing:.03em;}
-footer .center-link{font-size:var(--text-sm);font-weight:600;}
-
-@media (max-width:520px){
-  .bio{flex-direction:column;align-items:flex-start;}
-}
+footer{max-width:var(--width-case);margin:0 auto;padding-block:var(--gap-stack) var(--gap-group);}
+body:has(#page-home:not([hidden])) footer,body:has(#page-expense-app:not([hidden])) footer{max-width:var(--width-narrow);}
+body:has(#page-home:not([hidden])),body:has(#page-expense-app:not([hidden])){--page-w:var(--width-narrow);} /* top bar lines up with the centered column */
+footer .owner{font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:var(--tracking-label);}
 
 /* case page */
-.case-page{padding-block:var(--space-7) var(--space-1);}
+.case-page{max-width:var(--width-case);margin:0 auto;padding-block:var(--gap-block) var(--gap-hair);display:flex;flex-direction:column;gap:var(--gap-block);}
 .back-link{
-  font-family:'JetBrains Mono',monospace;font-size:var(--text-xs);color:var(--muted);
-  display:inline-flex;align-items:center;gap:var(--space-1);margin-bottom:var(--space-7);
+  font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text-muted);
+  display:flex;align-items:center;gap:var(--gap-hair);
+  position:sticky;top:var(--header-h, 82px);z-index:40;background:var(--color-bg);
+  padding:var(--gap-inline) 0;
 }
-.back-link:hover{color:var(--forest);}
-.case-head{display:flex;align-items:center;gap:var(--space-4);margin-bottom:var(--space-2);}
-.case-head .case-icon{width:48px;height:48px;font-size:1.3rem;}
-.case-head .case-icon svg{width:24px;height:24px;}
+.back-link:hover{color:var(--color-accent);}
+.case-cover{display:flex;justify-content:center;}
+.case-cover img{width:min(60%,280px);height:auto;}
+/* filters cannot use light-dark(), so the logo boost keeps a theme selector */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cover-approvy img{filter:brightness(1.6) saturate(1.1);}}
+:root[data-theme="dark"] .cover-approvy img{filter:brightness(1.6) saturate(1.1);}
+.case-head{padding-bottom:0;}
+.case-tags{display:flex;flex-wrap:wrap;gap:var(--gap-inline);list-style:none;margin:var(--gap-snug) 0 0;padding:0;}
+.case-tags li{font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text);padding:var(--gap-hair) var(--gap-snug);border:1px solid var(--color-border);border-radius:var(--radius-pill);}
+
+.next-case{display:flex;flex-direction:column;gap:var(--gap-hair);padding-block:var(--gap-group);color:var(--color-text);font-family:var(--font-display);font-size:var(--text-lg);}
+.next-case small{font-family:var(--font-body);font-size:var(--text-xs);font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:var(--tracking-label);color:var(--color-text-muted);}
+.next-case:hover{color:var(--color-accent);text-decoration:none;}
 .case-head h1{
-  font-family:'Newsreader',Georgia,serif;font-size:clamp(1.7rem,4.5vw,2.3rem);font-weight:400;
-  margin:0;letter-spacing:-.01em;
-}
-.case-meta{
-  font-family:'JetBrains Mono',monospace;font-size:var(--text-sm);color:var(--muted);
-  margin:0 0 var(--space-8);padding-bottom:var(--space-7);border-bottom:1px solid var(--hairline);
+  font-family:var(--font-display);font-size:var(--text-title);font-weight:var(--weight-display);
+  margin:0;letter-spacing:var(--tracking-tight);line-height:var(--leading-tight);
 }
 
 /* two-column layout: sticky TOC + content */
-.case-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:var(--space-9);align-items:start;}
+.case-layout{display:grid;grid-template-columns:var(--width-toc) minmax(0,1fr);gap:var(--gap-section);align-items:start;}
 .toc{
-  position:sticky;top:var(--space-6);max-height:calc(100vh - var(--space-9) - var(--space-4));overflow-y:auto;
-  display:flex;flex-direction:column;gap:2px;padding-right:var(--space-2);
+  position:sticky;top:calc(var(--header-h, 82px) + 56px);
+  max-height:calc(100vh - var(--header-h, 82px) - 56px - var(--gap-group));overflow-y:auto;
+  display:flex;flex-direction:column;gap:2px;padding-right:var(--gap-inline);scrollbar-width:none;
 }
 .toc a{
-  font-size:var(--text-sm);color:var(--muted);padding:5px 0;border-left:2px solid transparent;
-  padding-left:var(--space-3);line-height:1.4;
+  font-size:var(--text-xs);color:var(--color-text-muted);padding:5px 0 5px var(--gap-snug);
+  line-height:1.4;border-radius:var(--radius-pill);
 }
-.toc a:hover{color:var(--ink);text-decoration:none;}
-.toc a.active{color:var(--forest);border-left-color:var(--forest);font-weight:600;}
+.toc a:hover{color:var(--color-text);text-decoration:none;}
+.toc a.active{color:var(--color-accent);font-weight:var(--weight-semibold);}
+.toc-label{
+  font-weight:var(--weight-bold);font-size:var(--text-xs);color:var(--color-text);
+  text-transform:uppercase;letter-spacing:var(--tracking-label);margin:var(--gap-stack) 0 2px;
+}
+.toc-sublabel{
+  font-weight:var(--weight-semibold);font-size:var(--text-xs);color:var(--color-text-muted);
+  margin:var(--gap-inline) 0 2px;padding-left:var(--gap-snug);
+}
+.toc a.toc-l1{padding-left:calc(var(--gap-snug) * 2);}
+.toc a.toc-l2{padding-left:calc(var(--gap-snug) + var(--gap-group));}
+.case-body{position:relative;}
+.case-body > .toc-controls{position:absolute;top:0;right:0;z-index:1;display:flex;justify-content:flex-end;margin:0;}
+.toc-controls button{font:inherit;font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text-muted);background:none;border:none;padding:var(--gap-hair) 0;cursor:pointer;transition:color var(--dur-fast);}
+.toc-controls button:hover{color:var(--color-text);text-decoration:underline;text-underline-offset:.18em;}
+.toc-controls button:focus-visible{outline:var(--focus-ring);outline-offset:2px;}
 @media (max-width:900px){
-  .case-layout{grid-template-columns:1fr;}
-  .toc{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:var(--space-2) var(--space-4);margin-bottom:var(--space-3);padding:var(--space-3);background:var(--sand);border-radius:var(--radius-md);}
-  .toc a{padding:0;border-left:none;font-size:var(--text-xs);}
-  .toc a.active{text-decoration:underline;}
+  .case-layout{grid-template-columns:minmax(0,1fr);}
+  .toc{display:none;}
+}
+.toc-mobile{display:none;border-block:var(--border-thin);}
+.toc-mobile > summary{font-size:var(--text-xs);font-weight:var(--weight-semibold);text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--gap-snug) 0;cursor:pointer;}
+.toc-mobile nav{display:flex;flex-direction:column;gap:2px;padding-bottom:var(--gap-snug);}
+.toc-mobile a{font-size:var(--text-xs);color:var(--color-text-muted);padding:4px 0;}
+.toc-mobile .toc-label{font-size:var(--text-xs);font-weight:var(--weight-bold);color:var(--color-text);text-transform:uppercase;letter-spacing:var(--tracking-label);margin-top:var(--gap-snug);}
+.toc-mobile .toc-sublabel{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--gap-inline);}
+@media (max-width:900px){.toc-mobile{display:block;}}
+/* phones and small tablets: header scrolls away, Contents bar stays, every tap target is at least 44px */
+@media (max-width:900px){
+  header.topbar{position:static;padding-block:var(--gap-inline);}
+  .icon-links a,.topbar .right a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;}
+  .cv-chip{padding-block:0;}
+  .back-link{position:static;min-height:44px;}
+  .toc-mobile{position:sticky;top:0;z-index:45;background:var(--color-bg);}
+  .toc-mobile > summary{line-height:44px;padding-block:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .toc-mobile nav{max-height:60vh;overflow-y:auto;overscroll-behavior:contain;}
+  .toc-mobile a{display:block;line-height:44px;padding-block:0;}
+  .case-body > .toc-controls button{min-height:44px;padding-inline:var(--gap-inline);}
+  .case-body details.preamble > summary{min-height:44px;}
+  .lightbox .lb-close{width:44px;height:44px;}
+  .cta-link{display:inline-flex;align-items:center;min-height:44px;}
+  .case-body .demo-link{display:inline-flex;align-items:center;min-height:44px;}
+  .case-body li > a:first-child{display:inline-block;padding-block:var(--gap-snug);}
+  html{scroll-padding-top:calc(44px + var(--gap-stack));}
 }
 
-.case-body{max-width:72ch;padding-bottom:var(--space-5);}
-.case-body > details{border-top:1px solid var(--hairline);}
-.case-body > details:last-of-type{border-bottom:1px solid var(--hairline);}
-.case-body > details > summary{
-  font-family:'Public Sans',sans-serif;font-size:var(--text-md);font-weight:700;
-  letter-spacing:.01em;color:var(--ink);padding:var(--space-4) 0;cursor:pointer;
-  list-style:none;display:flex;align-items:center;gap:var(--space-2);
+.case-body{padding-bottom:var(--gap-group);}
+.case-body details > summary{
+  font-size:var(--text-md);font-weight:var(--weight-bold);color:var(--color-text);padding:var(--gap-stack) 0;cursor:pointer;
+  list-style:none;display:flex;align-items:center;gap:var(--gap-inline);
 }
-.case-body > details > summary::-webkit-details-marker{display:none;}
-.case-body > details > summary::before{
-  content:"▸";color:var(--forest);font-size:var(--text-xs);transition:transform .15s;display:inline-block;
+.case-body details > summary::-webkit-details-marker{display:none;}
+.case-body details > summary > h2{margin:0;font:inherit;letter-spacing:inherit;display:inline;}
+.case-body details > summary::before{
+  content:"▸";color:var(--color-accent);font-size:var(--text-xs);transition:transform var(--dur-fast);display:inline-block;
 }
-.case-body > details[open] > summary::before{transform:rotate(90deg);}
-.case-body > details > summary:hover{color:var(--forest);}
-.case-body > details > .sec-body{padding:0 0 var(--space-7);}
-.case-body p{font-size:var(--text-base);line-height:1.7;color:var(--muted);margin:0 0 var(--space-4);}
+.case-body details[open] > summary::before{transform:rotate(90deg);}
+.case-body details > summary:hover{color:var(--color-accent);}
+.case-body details > .sec-body{padding:0 0 var(--gap-block);}
+.case-body .group-label{
+  font-weight:var(--weight-bold);font-size:var(--text-xs);color:var(--color-accent);
+  text-transform:uppercase;letter-spacing:var(--tracking-label);padding:var(--gap-group) 0 var(--gap-inline);
+}
+.case-body .group-label.sub{
+  color:var(--color-text-muted);font-weight:var(--weight-semibold);padding:var(--gap-snug) 0 var(--gap-hair) var(--gap-stack);
+}
+.case-body p{max-width:var(--measure);font-size:var(--text-base);line-height:var(--leading-body);color:var(--color-text);margin:0 0 var(--gap-stack);}
 .case-body p:last-child{margin-bottom:0;}
-.case-body .stat-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--space-4);
-  margin:var(--space-1) 0 var(--space-7);padding:var(--space-5);background:var(--sand);border-radius:var(--radius-md);
-}
-.case-body .stat-grid div b{
-  display:block;font-family:'JetBrains Mono',monospace;font-size:1.4rem;color:var(--forest);
-  font-variant-numeric:tabular-nums;
-}
-.case-body .stat-grid div span{font-size:var(--text-2xs);color:var(--muted);text-transform:uppercase;letter-spacing:.03em;}
-.case-body ul{margin:0 0 var(--space-4);padding-left:var(--space-5);}
-.case-body li{font-size:var(--text-base);line-height:1.65;color:var(--muted);margin-bottom:var(--space-2);}
-.case-body figure{margin:var(--space-1) 0 var(--space-7);}
+.case-body ul{max-width:var(--measure);margin:0 0 var(--gap-stack);padding-left:var(--gap-group);}
+.case-body li{font-size:var(--text-base);line-height:1.65;color:var(--color-text);margin-bottom:var(--gap-inline);}
+.case-body ul ul{margin:var(--gap-inline) 0 0;}
+.case-body details.preamble > summary{font-size:var(--text-base);font-weight:var(--weight-medium);padding:var(--gap-inline) 0;}
+.case-body details.preamble + div{margin-top:var(--gap-section);} /* breathing room between the background list and the first part */
+.case-body details.preamble > .sec-body{padding:0 0 var(--gap-stack) var(--gap-group);}
+.case-body .lede{font-weight:var(--weight-bold);color:var(--color-accent);font-size:var(--text-md);line-height:1.45;margin-top:var(--gap-inline);}
+.case-body table{border-collapse:collapse;margin:0 0 var(--gap-stack);font-size:var(--text-xs);}
+.case-body th,.case-body td{text-align:left;padding:var(--gap-inline) var(--gap-group) var(--gap-inline) 0;border-bottom:var(--border-thin);color:var(--color-text-muted);}
+.table-scroll{overflow-x:auto;max-width:100%;margin:0 0 var(--gap-stack);}
+.table-scroll table{margin:0;}
+.case-body th{color:var(--color-text);font-weight:var(--weight-bold);}
+.case-body figure{margin:var(--gap-hair) 0 var(--gap-block);}
 .case-body figure img{
-  display:block;width:100%;height:auto;border-radius:var(--radius-md);border:1px solid var(--hairline);
-  background:var(--sand);cursor:zoom-in;
+  display:block;width:100%;height:auto;border-radius:var(--radius-md);border:var(--border-thin);
+  cursor:zoom-in;
 }
-.case-body figure figcaption{font-family:'JetBrains Mono',monospace;font-size:var(--text-2xs);color:var(--muted);margin-top:var(--space-2);text-align:center;}
-.case-body .fig-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin:var(--space-1) 0 var(--space-7);}
+.case-body figure figcaption{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--gap-inline);text-align:center;}
+.case-body .fig-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap-stack);margin:var(--gap-hair) 0 var(--gap-block);}
 .case-body .fig-row figure{margin:0;}
+/* images share the text column (same font-size, so 68ch matches the paragraphs): both edges line up with the text */
+.case-body figure,.case-body .fig-row{max-width:var(--measure);font-size:var(--text-base);}
+.case-body .fig-label{
+  font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text-muted);text-transform:uppercase;
+  letter-spacing:var(--tracking-label);margin:var(--gap-group) 0 var(--gap-inline);
+}
+.case-body .demo-link{font-weight:var(--weight-semibold);}
+/* each case page takes its own case color as the accent (lede, links, TOC, markers) */
+#page-approvy{--color-accent:var(--color-case-approvy);}
+#page-expense-app{--color-accent:var(--color-case-expense);}
 @media (max-width:640px){.case-body .fig-row{grid-template-columns:1fr;}}
+
+.case-page.home-inner{max-width:var(--width-narrow);}
+.case-body figure img:focus-visible{outline:var(--focus-ring);outline-offset:3px;}
 
 /* image lightbox */
 .lightbox{
-  position:fixed;inset:0;background:rgba(10,10,8,.9);z-index:999;
-  display:flex;align-items:center;justify-content:center;padding:var(--space-6);cursor:zoom-out;
+  position:fixed;inset:0;background:var(--color-overlay);z-index:999;
+  display:flex;align-items:center;justify-content:center;padding:var(--gap-group);cursor:zoom-out;
   overflow:auto;
 }
-.lightbox img{max-width:100%;width:auto;height:auto;border-radius:var(--radius-sm);margin:auto;display:block;}
+.lightbox img{max-width:100%;width:auto;height:auto;border-radius:var(--radius-sm);margin:auto;display:block;cursor:zoom-in;}
+.lightbox.actual img{max-width:none;cursor:zoom-out;}
+.lightbox .lb-hint{position:fixed;bottom:var(--gap-stack);left:50%;transform:translateX(-50%);background:var(--color-overlay-control);color:var(--color-on-overlay);font-size:var(--text-xs);font-weight:var(--weight-semibold);padding:var(--gap-inline) var(--gap-stack);border-radius:var(--radius-pill);pointer-events:none;white-space:nowrap;}
 .lightbox .lb-close{
-  position:fixed;top:var(--space-4);right:var(--space-5);color:#fff;
-  background:rgba(255,255,255,.12);border-radius:var(--radius-pill);
+  border:none;padding:0;cursor:pointer;
+  position:fixed;top:var(--gap-stack);right:var(--gap-group);color:var(--color-on-overlay);
+  background:var(--color-overlay-control);border-radius:var(--radius-pill);
   width:36px;height:36px;display:flex;align-items:center;justify-content:center;
 }
 .lightbox .lb-close svg{width:18px;height:18px;}
+.lightbox .lb-close:focus-visible{outline:2px solid var(--color-on-overlay);outline-offset:2px;}
+.toast{position:fixed;left:50%;bottom:var(--gap-group);transform:translateX(-50%);z-index:80;max-width:calc(100vw - 2 * var(--gap-stack));background:var(--color-text);color:var(--color-bg);font-size:var(--text-xs);font-weight:var(--weight-semibold);padding:var(--gap-inline) var(--gap-stack);border-radius:var(--radius-pill);pointer-events:none;animation:lbFade var(--dur-base) var(--ease-out);}
+.case-body details{position:relative;}
+.copy-link{position:absolute;top:var(--gap-snug);right:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--radius-pill);color:var(--color-text-muted);cursor:pointer;opacity:0;transition:opacity var(--dur-fast), color var(--dur-fast);}
+.copy-link svg{width:18px;height:18px;}
+.case-body details:hover > .copy-link,.copy-link:focus-visible{opacity:1;}
+.copy-link:hover{color:var(--color-accent);}
+.copy-link:focus-visible{outline:var(--focus-ring);outline-offset:2px;}
+@media (hover:none){.copy-link{opacity:.7;width:44px;height:44px;top:var(--gap-inline);}}
+
+/* ---- playful touches: transform/opacity only; all off under reduced motion (rule below) ---- */
+a.case-row{transition:transform var(--dur-medium) var(--ease-out);}
+a.case-row:hover{transform:translateX(6px);}
+a.case-row .case-icon{transition:transform var(--dur-medium) var(--ease-out);}
+a.case-row:hover .case-icon{transform:rotate(-12deg) scale(1.25);}
+.cta-link{transition:transform var(--dur-fast) var(--ease-out), opacity var(--dur-fast);}
+.cta-link:hover{transform:translateY(-2px);}
+.cta-link:active{transform:translateY(1px);}
+/* ---- more playful touches (same rules: transform/opacity only, off under reduced motion) ---- */
+.read-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:var(--color-accent);transform-origin:left;transform:scaleX(0);pointer-events:none;}
+@supports (animation-timeline: scroll()){
+  .read-progress{animation:readGrow linear both;animation-timeline:scroll(root);}
+  @keyframes readGrow{to{transform:scaleX(1);}}
+}
+body:has(#page-home:not([hidden])) .read-progress{display:none;}
+body:has(#page-approvy:not([hidden])) .read-progress{background:var(--color-case-approvy);}
+body:has(#page-chatbot:not([hidden])) .read-progress{background:var(--color-case-chatbot);}
+body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-case-expense);}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.25s;}
+.lightbox{animation:lbFade var(--dur-base) var(--ease-out);}
+.lightbox img{animation:lbZoom var(--dur-medium) var(--ease-out);}
+@keyframes lbFade{from{opacity:0;}}
+@keyframes lbZoom{from{opacity:0;transform:scale(.96);}}
+/* browsers without light-dark() (before about 2024) get the light theme */
+@supports not (color: light-dark(black, white)){
+  :root{--color-bg:var(--edhas-paper);--color-text:var(--edhas-ink);--color-text-muted:var(--neutral-44);--color-text-subtle:var(--neutral-50);--color-border:oklch(16% .005 80 / .14);--color-accent:var(--edhas-blue);--color-highlight:var(--edhas-periwinkle);--color-case-approvy:oklch(48% .238 298);--color-case-expense:oklch(50.8% .118 165.6);--color-avatar-bg:transparent;}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;}
+}
 </style>
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;1,400&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;1,400&family=Schibsted+Grotesk:wght@400;600;700&display=swap">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="read-progress" aria-hidden="true"></div>
 
 <header class="topbar">
   <div class="icon-links">
     <a href="https://github.com/Yentranprj" target="_blank" rel="noopener">GitHub</a>
     <a href="https://thoughtterrain.substack.com/" target="_blank" rel="noopener">Blog</a>
-    <a href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener">Book a call</a>
+    <a href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener" class="nav-book">Book a call</a>
   </div>
   <div class="right">
-    <a class="cv-chip" href="https://drive.google.com/file/d/116AXSi1CJLTAVDOUFUQx2HHjLnM7Y4kC/view?usp=sharing" target="_blank" rel="noopener">Resume ↓</a>
+    <a class="cv-chip" href="https://drive.google.com/file/d/116AXSi1CJLTAVDOUFUQx2HHjLnM7Y4kC/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
     <a class="email-link" href="mailto:h.yentran21@gmail.com">h.yentran21@gmail.com</a>
   </div>
 </header>
 
-<div class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 
   <!-- HOME -->
   <section id="page-home" class="page home-inner">
     <div class="bio">
-      <div class="avatar">YT</div>
+      <img class="me" src="assets/me/avatar.png" alt="Illustrated portrait of Yen Tran" width="120" height="120">
       <div>
-        <p class="name">Yen Tran</p>
+        <h1 class="name">Yen Tran</h1>
         <p class="title">Product manager</p>
       </div>
     </div>
 
     <section class="about">
-      <p>A builder who untangles problems that don't come with clear answers — product work shaped by <span class="bubble">user research</span>, hard trade-offs, and what actually made it to production.</p>
+      <p>A builder who untangles problems that don't come with clear answers: product work shaped by user research, hard trade-offs, and what actually made it to production.</p>
     </section>
 
     <section class="cases">
       <div class="label">Cases</div>
 
-      <a class="case-row" href="#approvy">
-        <div class="case-icon ci-green"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
-        <div>
-          <p class="title">Approvy</p>
-          <p class="meta">Product case study · 8 user interviews · Double Diamond</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
-
-      <a class="case-row" href="#chatbot">
-        <div class="case-icon ci-blue"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,48H136V16a8,8,0,0,0-16,0V48H56A32,32,0,0,0,24,80V192a32,32,0,0,0,32,32H200a32,32,0,0,0,32-32V80A32,32,0,0,0,200,48Zm16,144a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V80A16,16,0,0,1,56,64H200a16,16,0,0,1,16,16Zm-52-56H92a28,28,0,0,0,0,56h72a28,28,0,0,0,0-56Zm-24,16v24H116V152ZM80,164a12,12,0,0,1,12-12h8v24H92A12,12,0,0,1,80,164Zm84,12h-8V152h8a12,12,0,0,1,0,24ZM72,108a12,12,0,1,1,12,12A12,12,0,0,1,72,108Zm88,0a12,12,0,1,1,12,12A12,12,0,0,1,160,108Z"/></svg></div>
-        <div>
-          <p class="title">Lead qualification chatbot</p>
-          <p class="meta">Growth · PLG · 670 leads · 48% lead → MQL · 176 SALs</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
-
       <a class="case-row" href="#expense-app">
+        <span class="case-num">01</span>
         <div class="case-icon ci-amber"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"/></svg></div>
         <div>
           <p class="title">Personal expense app</p>
-          <p class="meta">0→1 build · live demo</p>
+          <p class="meta">Built end-to-end · budgets, transactions, goals · live demo</p>
         </div>
-        <span class="arrow">→</span>
       </a>
+
+      <a class="case-row" href="#approvy">
+        <span class="case-num">02</span>
+        <div class="case-icon ci-green"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
+        <div>
+          <p class="title">Approvy</p>
+          <p class="meta">Led a team of five · 8 user interviews to PRD and mockups</p>
+        </div>
+      </a>
+
+      <a class="case-row" href="#chatbot">
+        <span class="case-num">03</span>
+        <div class="case-icon ci-blue"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,48H136V16a8,8,0,0,0-16,0V48H56A32,32,0,0,0,24,80V192a32,32,0,0,0,32,32H200a32,32,0,0,0,32-32V80A32,32,0,0,0,200,48Zm16,144a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V80A16,16,0,0,1,56,64H200a16,16,0,0,1,16,16Zm-52-56H92a28,28,0,0,0,0,56h72a28,28,0,0,0,0-56Zm-24,16v24H116V152ZM80,164a12,12,0,0,1,12-12h8v24H92A12,12,0,0,1,80,164Zm84,12h-8V152h8a12,12,0,0,1,0,24ZM72,108a12,12,0,1,1,12,12A12,12,0,0,1,72,108Zm88,0a12,12,0,1,1,12,12A12,12,0,0,1,160,108Z"/></svg></div>
+        <div>
+          <p class="title">Lead qualification chatbot</p>
+          <p class="meta">Growth team · 48-hour replies to instant · 670 leads, 176 SALs</p>
+        </div>
+      </a>
+    </section>
+    <section class="cta">
+      <h2 class="cta-line">Let’s <span class="circled">build<svg viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true"><path class="draw" pathLength="1" d="M70 6 C35 2 6 14 5 31 C4 48 34 57 66 55 C98 53 116 42 114 27 C112 12 86 4 52 7"/></svg></span> together!</h2>
+      <a class="cta-link" href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener">Book a call</a>
     </section>
   </section>
 
   <!-- CASE: APPROVY -->
   <section id="page-approvy" class="page case-page" hidden>
     <a class="back-link" href="#">← All cases</a>
+    <div class="case-cover cover-approvy"><img src="assets/approvy/approvy-logo.webp" data-full="assets/approvy/approvy-logo.png" alt="Approvy logo" width="1024" height="267"></div>
     <div class="case-head">
-      <div class="case-icon ci-green"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></div>
-      <h1>Approvy</h1>
+      <h1>Approvy - Product Case Study</h1>
     </div>
-    <p class="case-meta">Product case study · 8 user interviews · Double Diamond (PDD → PRD)</p>
 
     <div class="case-layout">
-      <nav class="toc" data-toc></nav>
+      <nav class="toc" data-toc aria-label="Contents"></nav>
       <div class="case-body" data-case-body>
-      <h2>Background</h2>
-      <p>As a Product Manager at a relationship well-being startup, the brief was to investigate emerging user needs, validate a new problem space, and shape a solution concept that could inform future product direction — write a PRD covering problem statement, user research artifacts, and a described solution with workflow, ORD, activity diagram, wireframes, and user stories. Timeline: 3 weeks. I led a cross-functional team of five and owned the product from problem definition through solution delivery.</p>
+      <details class="preamble"><summary>Background</summary><div class="sec-body">
+      <p>As a Product Manager at a relationship well-being startup, you’re tasked with investigating emerging user needs, validating a new problem space, and shaping a solution concept that could inform future product direction.</p>
+      </div></details>
 
-      <h2>Overview</h2>
-      <p>Approvy turns meeting decisions into clear, time-bound approval requests so teams can stay aligned, avoid misunderstandings, and move projects forward smoothly. It captures decisions in a simple project-scoped log so context stays with the request, notifies the right stakeholders with a clear deadline and one-click approve/reject actions, and tracks outcomes and timestamps centrally to remove ambiguity and surface bottlenecks.</p>
+      <details class="preamble"><summary>Requirements</summary><div class="sec-body">
+      <ul>
+        <li>Please write a PRD that includes at least
+          <ul>
+            <li>High-level artifacts:
+              <ul>
+                <li>Problem statement</li>
+                <li>User research artifacts (JTBD, user interviews, job stories with desired outcomes)</li>
+                <li>Describe your solution (what is it, how it solves the selected problem)</li>
+                <li>Workflow</li>
+                <li>ORD</li>
+              </ul>
+            </li>
+            <li>Low-level artifacts:
+              <ul>
+                <li>Activity diagram</li>
+                <li>Wireframes</li>
+                <li>User stories</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>You are free to determine the scope of this feature however you see fit.</li>
+        <li>Timeline: November 5 - November 29, 2025 (3 weeks from the day you receive this request)</li>
+      </ul>
+      </div></details>
+
+      <details class="preamble"><summary>Abbreviations</summary><div class="sec-body">
+      <table>
+        <thead><tr><th></th><th>Abbreviation</th><th>Explanation</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>JTBD</td><td>Jobs To Be Done</td></tr>
+          <tr><td>2</td><td>ORD</td><td>Object Relationship Diagram</td></tr>
+          <tr><td>3</td><td>PM</td><td>Project Manager</td></tr>
+          <tr><td>4</td><td>PRD</td><td>Product Requirements Document</td></tr>
+        </tbody>
+      </table>
+      </div></details>
+
+      <details class="preamble"><summary>Role and contributions</summary><div class="sec-body">
+      <p>In this case study, I led a cross-functional team of five and owned the product from problem definition through solution delivery. Throughout the project, prioritization and feasibility trade-offs were determined across user needs, business goals, and technical constraints to move the project forward.</p>
+      </div></details>
+
+      <details class="preamble"><summary>Reader’s guide</summary><div class="sec-body">
+      <p>The case study is divided into three main sessions:</p>
+      <ul>
+        <li>Project Overview</li>
+        <li>Problem Space’s materials which can be placed in a separated document and used as a PDD (Product Discovery Document)</li>
+        <li>Solution Space’s materials which can be placed in a separated document and used as a PRD (Product Requirement Document)</li>
+      </ul>
+      </div></details>
+
+      <div class="toc-group" data-label="I. Project Overview">
+      <p class="lede">Approvy turns meeting decisions into clear, time-bound approval requests so teams can stay aligned, avoid misunderstandings, and move projects forward smoothly.</p>
+      <ul>
+        <li>Capture decisions in a simple project-scoped log so context stays with the request.</li>
+        <li>Notify the right stakeholders with a clear deadline and one-click actions (approve/reject).</li>
+        <li>Track outcomes and timestamps centrally to remove ambiguity and surface bottlenecks.</li>
+      </ul>
 
       <h2>Problem assumption</h2>
       <p>Teams spend significant time coordinating across meetings, email, and documents. Critical decisions often stall or get misinterpreted because there's no lightweight, standardized way to request and record approvals.</p>
 
       <h2>Target groups</h2>
-      <p><strong>Primary:</strong> product managers and project managers who own decisions and need approvals to move work forward. <strong>Secondary:</strong> approvers — managers, leads, and cross-functional stakeholders — who need quick context and a low-friction way to approve.</p>
+      <p><strong>Primary:</strong> product managers and project managers who own decisions and need approvals to move work forward.</p>
+      <p><strong>Secondary:</strong> approvers (managers, leads, and cross-functional stakeholders) who need quick context and a low-friction way to approve.</p>
 
       <h2>Methodology</h2>
-      <p>I applied the Double Diamond framework to structure discovery and early solution exploration: discover (problem — diverge), define (problem — converge), develop (solution — diverge), deliver (solution — converge). The split was roughly 70% problem space — research and converge via user interviews, JTBDs, a job map, and a clear problem statement — and 30% solution space, diverging into early concepts: workflow, object relationship diagrams, user stories, wireframes, and mockups.</p>
+      <p>I applied the Double Diamond framework to structure discovery and early solution exploration: discover (problem, diverge), define (problem, converge), develop (solution, diverge), deliver (solution, converge). The split was roughly 70% problem space (research and converge via user interviews, JTBDs, a job map, and a clear problem statement) and 30% solution space, diverging into early concepts: workflow, object relationship diagrams, user stories, wireframes, and mockups.</p>
       <figure>
-        <img src="assets/approvy/double-diamond.png" alt="Double Diamond framework diagram: Discover, Define, Develop, Deliver">
+        <img src="assets/approvy/double-diamond.webp" data-full="assets/approvy/double-diamond.png" alt="Double Diamond framework diagram: Discover, Define, Develop, Deliver" width="1798" height="1056" loading="lazy" decoding="async">
         <figcaption>Double Diamond framework applied to Approvy</figcaption>
       </figure>
+      </div>
 
+      <div class="toc-group" data-label="II. Problem Space (PDD)">
+      <div class="toc-subgroup" data-label="1. Diverge">
       <h2>User interviews</h2>
-      <p>I targeted young professionals — 1+ year of experience, under 35 — working in cross-functional environments. Why this segment: they have enough work experience to have real exposure to workplace dynamics, a high willingness to try new tools as early adopters, easy access for interviews and testing, and the segment is large and scalable across modern tech, agency, and corporate environments.</p>
-      <p>I ran qualitative interviews to surface assumptions and build testable hypotheses, structured around five job steps — Define + Locate, Prepare + Execute, Monitor, Modify, Conclude — each with its own research questions. I interviewed 8 people from the target segment: an initial 6 to surface early patterns, then 3 follow-ups after refining the questions. Raw notes and recordings stayed confidential per interviewees' requests; only anonymized summaries and synthesized insights are included here.</p>
+      <p>I targeted young professionals (1+ year of experience, under 35) working in cross-functional environments. Why this segment: they have enough work experience to have real exposure to workplace dynamics, a high willingness to try new tools as early adopters, easy access for interviews and testing, and the segment is large and scalable across modern tech, agency, and corporate environments.</p>
+      <p>I ran qualitative interviews to surface assumptions and build testable hypotheses, structured around five job steps (Define + Locate, Prepare + Execute, Monitor, Modify, Conclude), each with its own research questions. I interviewed 8 people from the target segment: an initial 6 to surface early patterns, then 3 follow-ups after refining the questions. Raw notes and recordings stayed confidential per interviewees' requests; only anonymized summaries and synthesized insights are included here.</p>
 
       <h2>Key insights</h2>
       <ul>
-        <li><strong>Relationships are strategic, not social.</strong> Building working relationships is an intentional, strategic choice tied to career success — interviewees prioritize actions that build trust and professional recognition over casual socializing.</li>
+        <li><strong>Relationships are strategic, not social.</strong> Building working relationships is an intentional, strategic choice tied to career success; interviewees prioritize actions that build trust and professional recognition over casual socializing.</li>
         <li><strong>Psychological impact appears first, then productivity drops.</strong> Poor relationships affect mood first; withdrawal, avoidance, and reduced collaboration follow. Emotional friction is an early warning sign.</li>
         <li><strong>Silence → late pushback loop is a core pattern.</strong> A PM issues a request, gets no clarifying questions, then faces rejection later due to "not understanding." The lack of an explicit acknowledgement step causes misalignment.</li>
         <li><strong>Shared evidence and structured language help resolve disputes.</strong> Teams that bring data or structured evaluation reduce subjective argument and increase agreement.</li>
@@ -348,122 +595,132 @@ footer .center-link{font-size:var(--text-sm);font-weight:600;}
       <h2>Job map</h2>
       <p>I converted those insights into a step-by-step job map, with the core job framed as "collaborate effectively in cross-functional projects": Define → Locate → Prepare → Confirm → Execute → Monitor → Modify → Conclude, each step grounded in real actions, problems, and insights pulled directly from the interviews.</p>
       <figure>
-        <img src="assets/approvy/job-map-full.png" alt="Full Job Map board with interview quotes across all 8 job steps">
-        <figcaption>Job Map — actions, problems, and insights per step, sourced from interview quotes</figcaption>
+        <img src="assets/approvy/job-map-full.webp" data-full="assets/approvy/job-map-full.png" alt="Full Job Map board with interview quotes across all 8 job steps" width="7462" height="4496" loading="lazy" decoding="async">
+        <figcaption>Job Map: actions, problems, and insights per step, sourced from interview quotes</figcaption>
       </figure>
 
       <h2>Prioritize job steps</h2>
-      <p>I focused the MVP primarily on the <em>Confirm</em> step — using an outlier case as a deep-dive — while keeping lightweight support for the upstream <em>Define</em> step. Interviews showed that ambiguity at the beginning is the root cause of most downstream problems; Define and Confirm are the "guarding" steps where a team can prevent rework instead of reacting to it, and interviewees had already invented informal workarounds that pointed to unmet needs there.</p>
+      <p>I focused the MVP primarily on the <em>Confirm</em> step, using an outlier case as a deep-dive, while keeping lightweight support for the upstream <em>Define</em> step. Interviews showed that ambiguity at the beginning is the root cause of most downstream problems; Define and Confirm are the "guarding" steps where a team can prevent rework instead of reacting to it, and interviewees had already invented informal workarounds that pointed to unmet needs there.</p>
+      </div>
 
+      <div class="toc-subgroup" data-label="2. Converge">
       <h2>Outlier case</h2>
-      <p>Zooming into one interviewee's case (Ms. XX) surfaced the root cause directly in her own words: a illusion of consensus caused by colleagues giving the "silent treatment," plus the workaround she'd already invented — a manual "evaluation table" to force a decision, with no mechanism to hold other teams accountable for it.</p>
+      <p>Zooming into one interviewee's case (Ms. XX) surfaced the root cause directly in her own words: a illusion of consensus caused by colleagues giving the "silent treatment," plus the workaround she'd already invented: a manual "evaluation table" to force a decision, with no mechanism to hold other teams accountable for it.</p>
       <figure>
-        <img src="assets/approvy/outlier-quotes.png" alt="Outlier case interview quotes, annotated">
+        <img src="assets/approvy/outlier-quotes.webp" data-full="assets/approvy/outlier-quotes.png" alt="Outlier case interview quotes, annotated" width="2048" height="1120" loading="lazy" decoding="async">
         <figcaption>Outlier case: root cause and the workaround the interviewee invented</figcaption>
       </figure>
 
       <h2>Assumption and JTBDs</h2>
-      <p>With these implications — an illusion of consensus from silent treatment (Confirm), and no official record of agreed decisions (Define) — I refined the underlying causal assumption: project managers who manage cross-functional contributors struggle to confirm whether alignment has actually been reached, caused by a lack of visible, multi-party sign-off and no confirmation gate. (I don't assume recorded sign-off is the only causal lever — manager engagement, team norms, and the quality of the Define step are other variables; this stayed a testable hypothesis.) That became two JTBDs:</p>
+      <p>With these implications (an illusion of consensus from silent treatment in Confirm, and no official record of agreed decisions in Define), I refined the underlying causal assumption: project managers who manage cross-functional contributors struggle to confirm whether alignment has actually been reached, caused by a lack of visible, multi-party sign-off and no confirmation gate. (I don't assume recorded sign-off is the only causal lever; manager engagement, team norms, and the quality of the Define step are other variables; this stayed a testable hypothesis.) That became two JTBDs:</p>
       <div class="fig-row">
         <figure>
-          <img src="assets/approvy/jtbd1-card.png" alt="JTBD1: Decision Approval card">
-          <figcaption>JTBD1 — Decision Approval</figcaption>
+          <img src="assets/approvy/jtbd1-card.webp" data-full="assets/approvy/jtbd1-card.png" alt="JTBD1: Decision Approval card" width="2048" height="766" loading="lazy" decoding="async">
+          <figcaption>JTBD1: Decision Approval</figcaption>
         </figure>
         <figure>
-          <img src="assets/approvy/jtbd2-card.png" alt="JTBD2: Responsibility Engagement card">
-          <figcaption>JTBD2 — Responsibility Engagement</figcaption>
+          <img src="assets/approvy/jtbd2-card.webp" data-full="assets/approvy/jtbd2-card.png" alt="JTBD2: Responsibility Engagement card" width="2048" height="740" loading="lazy" decoding="async">
+          <figcaption>JTBD2: Responsibility Engagement</figcaption>
         </figure>
       </div>
 
       <h2>Prioritize JTBDs</h2>
       <p>I chose JTBD1 (Decision Approval) since it's the root cause behind JTBD2, drives greater business impact, carries a stronger emotional payoff, is easier to address with concrete solutions like workflow approvals and audit trails, and has a higher chance of success because it relies less on changing human behavior.</p>
       <figure>
-        <img src="assets/approvy/jtbd-narrow-down.png" alt="Narrow down comparison table: JTBD1 vs JTBD2 across core problem, functional/emotional/social job, and solvability">
+        <img src="assets/approvy/jtbd-narrow-down.webp" data-full="assets/approvy/jtbd-narrow-down.png" alt="Narrow down comparison table: JTBD1 vs JTBD2 across core problem, functional/emotional/social job, and solvability" width="1788" height="1480" loading="lazy" decoding="async">
         <figcaption>Narrowing down: JTBD1 vs. JTBD2</figcaption>
       </figure>
 
       <h2>Problem statement</h2>
-      <p>PMs managing cross-functional projects struggle to secure clear, auditable approvals from stakeholders in a timely way, making it difficult to avoid misunderstandings and causing delays or uncertainty when trying to finalize a project's decisions. As a job-to-be-done: when I organize a meeting about a new project with leaders from other specialized departments, and it ends with them only listening — without confirmation that they understand, and without any formal approval in writing — I want a clear approval instead of silent listening, or at minimum a specific stated concern if they disagree, so that I don't mistakenly assume the project has been agreed upon and don't have to re-explain or re-handle the same issues multiple times.</p>
+      <p>PMs managing cross-functional projects struggle to secure clear, auditable approvals from stakeholders in a timely way, making it difficult to avoid misunderstandings and causing delays or uncertainty when trying to finalize a project's decisions. As a job-to-be-done: when I organize a meeting about a new project with leaders from other specialized departments, and it ends with them only listening, without confirmation that they understand, and without any formal approval in writing, I want a clear approval instead of silent listening, or at minimum a specific stated concern if they disagree, so that I don't mistakenly assume the project has been agreed upon and don't have to re-explain or re-handle the same issues multiple times.</p>
+      </div>
+      </div>
 
+      <div class="toc-group" data-label="III. Solution Space (PRD)">
+      <div class="toc-subgroup" data-label="3. Diverge">
       <h2>Solution idea</h2>
       <p>With the problem statement and JTBD established, I identified six key needs the solution had to bridge between the goal and the outcome: enable fast decision-making without delays, have documented proof of approval, know immediately if there's an objection or delay, avoid presenting and resolving the same issue repeatedly, and ensure clear accountability across departments.</p>
       <figure>
-        <img src="assets/approvy/solution-idea-bridge.png" alt="Solution idea: bridging the gap from goal to result with five supporting needs">
+        <img src="assets/approvy/solution-idea-bridge.webp" data-full="assets/approvy/solution-idea-bridge.png" alt="Solution idea: bridging the gap from goal to result with five supporting needs" width="1548" height="634" loading="lazy" decoding="async">
         <figcaption>Bridging the gap between the goal and the result</figcaption>
       </figure>
 
       <h2>Competitor analysis</h2>
-      <p>I reviewed three existing tools against that criteria — loqbooq (transparent decision logging, but approvals can stall if key members are unavailable, and it only documents "what" and "why," not deeper analysis), Wrike (full project management, but heavyweight and less specialized for decision logging), and DecisionDesk.io (end-to-end workflows, but a steep learning curve and UI complexity for non-technical users). I concluded the most effective approach was an independent web app that guarantees enforceable approvals, a stable audit trail, and easy tracking.</p>
+      <p>I reviewed three existing tools against that criteria: loqbooq (transparent decision logging, but approvals can stall if key members are unavailable, and it only documents "what" and "why," not deeper analysis), Wrike (full project management, but heavyweight and less specialized for decision logging), and DecisionDesk.io (end-to-end workflows, but a steep learning curve and UI complexity for non-technical users). I concluded the most effective approach was an independent web app that guarantees enforceable approvals, a stable audit trail, and easy tracking.</p>
       <figure>
-        <img src="assets/approvy/competitor-analysis.png" alt="Competitor analysis table: loqbooq, Wrike, DecisionDesk.io with key features and known limitations">
+        <img src="assets/approvy/competitor-analysis.webp" data-full="assets/approvy/competitor-analysis.png" alt="Competitor analysis table: loqbooq, Wrike, DecisionDesk.io with key features and known limitations" width="2048" height="775" loading="lazy" decoding="async">
         <figcaption>Competitor analysis</figcaption>
       </figure>
 
       <h2>Product concept</h2>
-      <p>That became Approvy: a SaaS web app for documenting project decisions, helping PMs create meeting notes and obtain clear, timely approvals from stakeholders, reduce delays and repeated explanations, and create a transparent, traceable decision history — with core features like decision logs, a time-bound approval mechanism, automated approval workflow, and a full audit trail.</p>
+      <p>That became Approvy: a SaaS web app for documenting project decisions, helping PMs create meeting notes and obtain clear, timely approvals from stakeholders, reduce delays and repeated explanations, and create a transparent, traceable decision history, with core features like decision logs, a time-bound approval mechanism, automated approval workflow, and a full audit trail.</p>
       <figure>
-        <img src="assets/approvy/product-opportunities.png" alt="Product Opportunities: Time-Bound Decision Approval, Dynamic Approver Management, Automated Approval Process, Approval process tracking">
+        <img src="assets/approvy/product-opportunities.webp" data-full="assets/approvy/product-opportunities.png" alt="Product Opportunities: Time-Bound Decision Approval, Dynamic Approver Management, Automated Approval Process, Approval process tracking" width="2030" height="450" loading="lazy" decoding="async">
         <figcaption>Surfaced product opportunities</figcaption>
       </figure>
       <figure>
-        <img src="assets/approvy/product-concept-table.png" alt="Product concept spec table: category, goal, core decision features, target users, UX standards, monetization">
+        <img src="assets/approvy/product-concept-table.webp" data-full="assets/approvy/product-concept-table.png" alt="Product concept spec table: category, goal, core decision features, target users, UX standards, monetization" width="1624" height="770" loading="lazy" decoding="async">
         <figcaption>Product concept spec</figcaption>
       </figure>
+      </div>
 
+      <div class="toc-subgroup" data-label="4. Converge">
       <h2>High-level artifacts</h2>
       <p>With the concept defined, I mapped the workflow across both roles (Project Manager and Approvers), the database objects, and the object relationship diagram.</p>
       <figure>
-        <img src="assets/approvy/workflow-swimlane.png" alt="Workflow swimlane diagram for Project Manager and Approvers">
+        <img src="assets/approvy/workflow-swimlane.webp" data-full="assets/approvy/workflow-swimlane.png" alt="Workflow swimlane diagram for Project Manager and Approvers" width="4061" height="5229" loading="lazy" decoding="async">
         <figcaption>4.1 Workflow</figcaption>
       </figure>
       <figure>
-        <img src="assets/approvy/data-objects.png" alt="Data Objects: User, Project, Meeting note, MeetingNoteHistory, ProjectApprover, Notifications schemas">
-        <figcaption>4.2 Database — Data Objects</figcaption>
+        <img src="assets/approvy/data-objects.webp" data-full="assets/approvy/data-objects.png" alt="Data Objects: User, Project, Meeting note, MeetingNoteHistory, ProjectApprover, Notifications schemas" width="2860" height="1590" loading="lazy" decoding="async">
+        <figcaption>4.2 Database: Data Objects</figcaption>
       </figure>
       <figure>
-        <img src="assets/approvy/ord-diagram.png" alt="Object Relationship Diagram (ORD) showing User, Project, Meeting note, Notifications relationships">
+        <img src="assets/approvy/ord-diagram.webp" data-full="assets/approvy/ord-diagram.png" alt="Object Relationship Diagram (ORD) showing User, Project, Meeting note, Notifications relationships" width="2906" height="1985" loading="lazy" decoding="async">
         <figcaption>4.3 Object Relationship Diagram</figcaption>
       </figure>
 
       <h2>Low-level artifacts</h2>
-      <p>I prioritized user stories with a MoSCoW-style must-have / nice-to-have split across nine flows — signup, project creation, meeting notes, approver assignment, timebound deadlines, review and send, await approval, monitoring, and recording/closing — then built activity diagrams and mockups for both the PM's view and the approver's view.</p>
+      <p>I prioritized user stories with a MoSCoW-style must-have / nice-to-have split across nine flows (signup, project creation, meeting notes, approver assignment, timebound deadlines, review and send, await approval, monitoring, and recording/closing), then built activity diagrams and mockups for both the PM's view and the approver's view.</p>
       <figure>
-        <img src="assets/approvy/user-stories-prioritized.png" alt="Prioritize User Stories table, must-have and nice-to-have, across 9 flows">
+        <img src="assets/approvy/user-stories-prioritized.webp" data-full="assets/approvy/user-stories-prioritized.png" alt="Prioritize User Stories table, must-have and nice-to-have, across 9 flows" width="7772" height="2745" loading="lazy" decoding="async">
         <figcaption>4.4 User stories, prioritized</figcaption>
       </figure>
-      <p class="mono" style="font-size:.9rem;color:var(--muted);">Mockups — PM's view</p>
+      <p class="fig-label">Mockups: PM's view</p>
       <div class="fig-row">
         <figure>
-          <img src="assets/approvy/mockup-step1-create-project.png" alt="Mockup Step 1: Create Project">
-          <figcaption>Step 1 — Create project</figcaption>
+          <img src="assets/approvy/mockup-step1-create-project.webp" data-full="assets/approvy/mockup-step1-create-project.png" alt="Mockup Step 1: Create Project" width="3475" height="1514" loading="lazy" decoding="async">
+          <figcaption>Step 1: Create project</figcaption>
         </figure>
         <figure>
-          <img src="assets/approvy/mockup-step2-create-meeting-note.png" alt="Mockup Step 2: Create meeting note">
-          <figcaption>Step 2 — Create meeting note</figcaption>
+          <img src="assets/approvy/mockup-step2-create-meeting-note.webp" data-full="assets/approvy/mockup-step2-create-meeting-note.png" alt="Mockup Step 2: Create meeting note" width="5321" height="1841" loading="lazy" decoding="async">
+          <figcaption>Step 2: Create meeting note</figcaption>
         </figure>
       </div>
       <figure>
-        <img src="assets/approvy/mockup-step3-view-requests.png" alt="Mockup Step 3: View approved and rejected requests, with activity log">
-        <figcaption>Step 3 — View approved / rejected requests</figcaption>
+        <img src="assets/approvy/mockup-step3-view-requests.webp" data-full="assets/approvy/mockup-step3-view-requests.png" alt="Mockup Step 3: View approved and rejected requests, with activity log" width="5321" height="2487" loading="lazy" decoding="async">
+        <figcaption>Step 3: View approved / rejected requests</figcaption>
       </figure>
-      <p class="mono" style="font-size:.9rem;color:var(--muted);">Mockup — Approver's view</p>
+      <p class="fig-label">Mockup: Approver's view</p>
       <figure>
-        <img src="assets/approvy/mockup-approve-reject-modal.png" alt="Approver mockup: approve/reject a meeting note's decisions, with reject-reason modal">
+        <img src="assets/approvy/mockup-approve-reject-modal.webp" data-full="assets/approvy/mockup-approve-reject-modal.png" alt="Approver mockup: approve/reject a meeting note's decisions, with reject-reason modal" width="5475" height="2144" loading="lazy" decoding="async">
         <figcaption>Approve / reject a decision, with a required rejection reason</figcaption>
       </figure>
 
       <h2>Enhancements</h2>
-      <p>Beyond the MVP: success metrics (documented approval rate, median time to approval, on-time approval rate), a three-phase feature roadmap (MVP → scale & reduce friction → governance & analytics), a pilot launch plan (onboard 3–5 PMs, build onboarding content, targeted outreach), marketing tactics (content, community/partnerships, paid), and a freemium monetization model.</p>
+      <p>Beyond the MVP: success metrics (documented approval rate, median time to approval, on-time approval rate), a three-phase feature roadmap (MVP → scale & reduce friction → governance & analytics), a pilot launch plan (onboard 3 to 5 PMs, build onboarding content, targeted outreach), marketing tactics (content, community/partnerships, paid), and a freemium monetization model.</p>
       <figure>
-        <img src="assets/approvy/enhancements-detail.png" alt="Enhancements: success metrics, feature prioritization phases, launching phase, marketing tactics, monetization strategy">
+        <img src="assets/approvy/enhancements-detail.webp" data-full="assets/approvy/enhancements-detail.png" alt="Enhancements: success metrics, feature prioritization phases, launching phase, marketing tactics, monetization strategy" width="3632" height="4889" loading="lazy" decoding="async">
         <figcaption>Enhancements roadmap</figcaption>
       </figure>
+      </div>
+      </div>
 
       <h2>References</h2>
       <ul>
-        <li><a href="https://www.figma.com/board/3i8Ld9r1pGDfXc65j5bdCR/Approvy---documenting-project-decisions?node-id=0-1" target="_blank" rel="noopener">Product artifacts on Figma (English)</a></li>
-        <li><a href="https://www.figma.com/board/ESX3yCRoQkTKGlWRczQq3q/Team-S%E1%BB%91-M%E1%BB%99t-WorkSpace?node-id=0-1" target="_blank" rel="noopener">Product artifacts on Figma (Vietnamese)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=UW8qLgs1o0s" target="_blank" rel="noopener">Video presentation</a> — AI-dubbed English audio by default; switch the audio track for Vietnamese.</li>
+        <li><a href="https://www.figma.com/board/3i8Ld9r1pGDfXc65j5bdCR/Approvy---documenting-project-decisions?node-id=0-1" target="_blank" rel="noopener noreferrer">Product artifacts on Figma (English)</a></li>
+        <li><a href="https://www.figma.com/board/ESX3yCRoQkTKGlWRczQq3q/Team-S%E1%BB%91-M%E1%BB%99t-WorkSpace?node-id=0-1" target="_blank" rel="noopener noreferrer">Product artifacts on Figma (Vietnamese)</a></li>
+        <li><a href="https://www.youtube.com/watch?v=UW8qLgs1o0s" target="_blank" rel="noopener noreferrer">Video presentation</a>: AI-dubbed English audio by default; switch the audio track for Vietnamese.</li>
       </ul>
       </div>
     </div>
@@ -473,65 +730,63 @@ footer .center-link{font-size:var(--text-sm);font-weight:600;}
   <section id="page-chatbot" class="page case-page" hidden>
     <a class="back-link" href="#">← All cases</a>
     <div class="case-head">
-      <div class="case-icon ci-blue"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,48H136V16a8,8,0,0,0-16,0V48H56A32,32,0,0,0,24,80V192a32,32,0,0,0,32,32H200a32,32,0,0,0,32-32V80A32,32,0,0,0,200,48Zm16,144a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V80A16,16,0,0,1,56,64H200a16,16,0,0,1,16,16Zm-52-56H92a28,28,0,0,0,0,56h72a28,28,0,0,0,0-56Zm-24,16v24H116V152ZM80,164a12,12,0,0,1,12-12h8v24H92A12,12,0,0,1,80,164Zm84,12h-8V152h8a12,12,0,0,1,0,24ZM72,108a12,12,0,1,1,12,12A12,12,0,0,1,72,108Zm88,0a12,12,0,1,1,12,12A12,12,0,0,1,160,108Z"/></svg></div>
       <h1>Lead qualification chatbot</h1>
     </div>
-    <p class="case-meta">Growth · PLG · FreshChat</p>
 
     <div class="case-layout">
-      <nav class="toc" data-toc></nav>
+      <nav class="toc" data-toc aria-label="Contents"></nav>
       <div class="case-body" data-case-body>
       <h2>Context</h2>
-      <p>The product I was working on was a platform used by QA engineers and development teams. It was accessible enough to get started, but getting real value from it required technical knowledge and a clear use case — buyers typically needed some skill familiarity before fully committing. At the time, the inbound motion consisted of a two-person sales team: every prospect who wanted to learn more, get a demo, or ask a technical question came through them directly, with a ~48-hour response window. I was on the Growth team, sitting between product and the sales motion to scale the self-service journey (PLG), which let me see where the existing approach could improve.</p>
+      <p>The product I was working on was a platform used by QA engineers and development teams. It was accessible enough to get started, but getting real value from it required technical knowledge and a clear use case; buyers typically needed some skill familiarity before fully committing. At the time, the inbound motion consisted of a two-person sales team: every prospect who wanted to learn more, get a demo, or ask a technical question came through them directly, with a ~48-hour response window. I was on the Growth team, sitting between product and the sales motion to scale the self-service journey (PLG), which let me see where the existing approach could improve.</p>
 
+      <div class="toc-group" data-label="2. High-level Problem Mapping">
       <h2>Mapping the problem</h2>
-      <p>Before jumping to a solution, I mapped how the existing inbound workflow actually operated — from the moment a prospect landed on the website to the moment a lead was accepted or rejected. The map showed a structural mismatch: once a message landed with the sales rep, the workflow branched into something much heavier. The real cost wasn't any single step; it was that the full sequence repeated for every inbound lead regardless of how likely it was to convert. High-fit prospects waited in the same queue as low-fit ones, and the team had no way to tell the difference until they'd already done the work.</p>
+      <p>Before jumping to a solution, I mapped how the existing inbound workflow actually operated, from the moment a prospect landed on the website to the moment a lead was accepted or rejected. The map showed a structural mismatch: once a message landed with the sales rep, the workflow branched into something much heavier. The real cost wasn't any single step; it was that the full sequence repeated for every inbound lead regardless of how likely it was to convert. High-fit prospects waited in the same queue as low-fit ones, and the team had no way to tell the difference until they'd already done the work.</p>
       <figure>
-        <img src="assets/chatbot/workflow-map.png" alt="Existing inbound workflow map: Customer, Problem Space, and Sales Rep swimlanes">
+        <img src="assets/chatbot/workflow-map.webp" data-full="assets/chatbot/workflow-map.png" alt="Existing inbound workflow map: Customer, Problem Space, and Sales Rep swimlanes" width="5625" height="5964" loading="lazy" decoding="async">
         <figcaption>Existing inbound workflow, including the "Problem Space" cost loop</figcaption>
       </figure>
-      <p>Looking at how the team operated, two gaps stood out. First, an existing demo request form captured contact information — name, email, company, job title, team size, an open text field — but not intent: the rep could see <em>who</em> was asking, but not <em>why</em>, what problem they were solving, or where they were in their buying journey, so every conversation still started from scratch. Second, not every inbound message could realistically become a sales conversation — fit depends on need, budget, timeline, and reaching the right person — but the workflow treated every message the same regardless of how likely it was to convert.</p>
+      <p>Looking at how the team operated, two gaps stood out. First, an existing demo request form captured contact information (name, email, company, job title, team size, an open text field) but not intent: the rep could see <em>who</em> was asking, but not <em>why</em>, what problem they were solving, or where they were in their buying journey, so every conversation still started from scratch. Second, not every inbound message could realistically become a sales conversation (fit depends on need, budget, timeline, and reaching the right person), but the workflow treated every message the same regardless of how likely it was to convert.</p>
 
       <h2>Job story and problem statement</h2>
       <p>After validating these insights with the sales team, I wrote the job story: when inbound leads contact me, I usually have to manually research each prospect's background, handle a large number of requests across niche and technical use cases, and qualify each lead individually without knowing upfront if they truly intend to buy. I want leads to have already engaged with product resources on their own, and their basic context and intent captured before the first conversation, so that I can immediately focus on high-intent prospects while the rest are handled and nurtured automatically.</p>
-      <p>That became the problem statement: the two-person inbound team struggled to prioritize and qualify high-intent leads due to the large volume of requests, resulting in slower response times, missed opportunities, and a lower-quality customer experience — for both the external prospects evaluating the product and the internal sales team trying to serve them.</p>
+      <p>That became the problem statement: the two-person inbound team struggled to prioritize and qualify high-intent leads due to the large volume of requests, resulting in slower response times, missed opportunities, and a lower-quality customer experience, for both the external prospects evaluating the product and the internal sales team trying to serve them.</p>
 
       <h2>Choosing where to focus</h2>
-      <p>I mapped three possible use cases — lead qualification, self-service FAQ, and handoff to a sales rep — against user value, business value, and strategic impact, and chose to solve lead qualification first because it mapped directly to the team's North Star metric: improving MQL → SQL conversion. The other two use cases supported the same funnel but were secondary outcomes.</p>
+      <p>I mapped three possible use cases (lead qualification, self-service FAQ, and handoff to a sales rep) against user value, business value, and strategic impact, and chose to solve lead qualification first because it mapped directly to the team's North Star metric: improving MQL → SQL conversion. The other two use cases supported the same funnel but were secondary outcomes.</p>
+      </div>
 
+      <div class="toc-group" data-label="3. Solution">
       <h2>Solution and scope</h2>
-      <p>I evaluated the realistic build options against the team's constraints using an impact-effort matrix. A chatbot won because it was the only option that solved both problems at once — capturing leads and qualifying them automatically, like an alternative human agent — and the team's existing FreshChat relationship made it a practical choice, since the infrastructure was already partially in place.</p>
+      <p>I evaluated the realistic build options against the team's constraints using an impact-effort matrix. A chatbot won because it was the only option that solved both problems at once (capturing leads and qualifying them automatically, like an alternative human agent), and the team's existing FreshChat relationship made it a practical choice, since the infrastructure was already partially in place.</p>
       <figure>
-        <img src="assets/chatbot/impact-effort-matrix.png" alt="Impact-Effort Matrix: Chatbot scores high value, low effort">
-        <figcaption>Impact-Effort Matrix — chatbot wins on high value, low effort</figcaption>
+        <img src="assets/chatbot/impact-effort-matrix.webp" data-full="assets/chatbot/impact-effort-matrix.png" alt="Impact-Effort Matrix: Chatbot scores high value, low effort" width="1024" height="813" loading="lazy" decoding="async">
+        <figcaption>Impact-Effort Matrix: chatbot wins on high value, low effort</figcaption>
       </figure>
-      <p>In scope for v1: automated lead qualification via a conversational flow that captures prospect context before the first human touchpoint; a self-service FAQ powered by an integrated knowledge base; enforced qualification fields; conversation logic tailored to user type (trial/free vs. paid); and intelligent routing to hand off qualified leads to a sales rep by predefined rules. Out of scope: automated lead scoring, analytics/bot performance tracking, multi-language support, and mobile optimization — all deprioritized to keep the v1 build tight.</p>
-      <p>The main technical constraint was having no in-house build resources, so the entire build had to be configured within FreshChat's paid tier rather than evaluated from scratch — which narrowed the options but also accelerated the timeline. Conversation design became the primary performance lever, since no custom NLP or intent modeling was possible within the tool.</p>
-      <p>Before touching FreshChat, I mapped every step and decision point as an activity diagram, then configured the logic, wrote the content, and set the conditions directly inside the tool. I demoed the build to the sales team to confirm the flow matched their expectations and that they understood what a lead notification would look like on their end, then worked with a web developer to integrate it on the site — debugging a first deployment where the chatbot didn't appear at all — before setting up the notification trigger so the sales team got notified immediately when a prospect submitted their information.</p>
+      <p>In scope for v1: automated lead qualification via a conversational flow that captures prospect context before the first human touchpoint; a self-service FAQ powered by an integrated knowledge base; enforced qualification fields; conversation logic tailored to user type (trial/free vs. paid); and intelligent routing to hand off qualified leads to a sales rep by predefined rules. Out of scope: automated lead scoring, analytics/bot performance tracking, multi-language support, and mobile optimization, all deprioritized to keep the v1 build tight.</p>
+      <p>The main technical constraint was having no in-house build resources, so the entire build had to be configured within FreshChat's paid tier rather than evaluated from scratch, which narrowed the options but also accelerated the timeline. Conversation design became the primary performance lever, since no custom NLP or intent modeling was possible within the tool.</p>
+      <p>Before touching FreshChat, I mapped every step and decision point as an activity diagram, then configured the logic, wrote the content, and set the conditions directly inside the tool. I demoed the build to the sales team to confirm the flow matched their expectations and that they understood what a lead notification would look like on their end, then worked with a web developer to integrate it on the site (debugging a first deployment where the chatbot didn't appear at all) before setting up the notification trigger so the sales team got notified immediately when a prospect submitted their information.</p>
       <figure>
-        <img src="assets/chatbot/chatbot-flow-diagram.png" alt="Chatbot activity diagram: Prospect, System, Sales Rep swimlanes from FAQ to lead capture">
-        <figcaption>Chatbot flow — FAQ deflection, escalation, and lead capture</figcaption>
+        <img src="assets/chatbot/chatbot-flow-diagram.webp" data-full="assets/chatbot/chatbot-flow-diagram.png" alt="Chatbot activity diagram: Prospect, System, Sales Rep swimlanes from FAQ to lead capture" width="5091" height="6590" loading="lazy" decoding="async">
+        <figcaption>Chatbot flow: FAQ deflection, escalation, and lead capture</figcaption>
       </figure>
+      </div>
 
+      <div class="toc-group" data-label="4. Impacts &amp; Learnings">
       <h2>Impact</h2>
       <figure>
-        <img src="assets/chatbot/live-chatbot-screenshot.png" alt="Live chatbot on the Katalon website, Xavia @ Katalon greeting bubble">
+        <img src="assets/chatbot/live-chatbot-screenshot.webp" data-full="assets/chatbot/live-chatbot-screenshot.png" alt="Live chatbot on the Katalon website, Xavia @ Katalon greeting bubble" width="1902" height="968" loading="lazy" decoding="async">
         <figcaption>The chatbot live on the website</figcaption>
       </figure>
-      <div class="stat-grid">
-        <div><b>670</b><span>Leads generated</span></div>
-        <div><b>5,000+</b><span>Conversations</span></div>
-        <div><b>320</b><span>MQLs (48%)</span></div>
-        <div><b>176</b><span>Qualified SALs</span></div>
-      </div>
-      <p>The chatbot became the primary intake point for inbound interest, handling conversations that previously landed directly in the sales team's inbox. Within the first quarter post-launch it generated 670 leads and over 5,000 conversations; of those leads, 320 converted to MQLs — a 48% lead-to-MQL conversion rate — with 176 ultimately qualifying as SALs. Beyond the numbers, FAQ responses went from a 48-hour wait to instant, and the sales team stopped fielding basic product questions and started focusing on conversations that were actually worth having.</p>
+      <p>The chatbot became the primary intake point for inbound interest, handling conversations that previously landed directly in the sales team's inbox. Within the first quarter post-launch it generated 670 leads and over 5,000 conversations; of those leads, 320 converted to MQLs (a 48% lead-to-MQL conversion rate), with 176 ultimately qualifying as SALs. Beyond the numbers, FAQ responses went from a 48-hour wait to instant, and the sales team stopped fielding basic product questions and started focusing on conversations that were actually worth having.</p>
       <figure>
-        <img src="assets/chatbot/funnel-chart.png" alt="Q1 YTD funnel: 670 total leads, 320 MQLs, 162 SAL">
+        <img src="assets/chatbot/funnel-chart.webp" data-full="assets/chatbot/funnel-chart.png" alt="Q1 YTD funnel: 670 total leads, 320 MQLs, 162 SAL" width="868" height="534" loading="lazy" decoding="async">
         <figcaption>Q1 YTD funnel</figcaption>
       </figure>
 
       <h2>What I'd do differently</h2>
-      <p>The chatbot worked, but looking back, the biggest limitation wasn't the flow or the conversion numbers — it was maintenance. Every time the product changed, the conversation content had to be manually updated across the entire flow, which created an ongoing dependency on someone to keep the agent accurate — not sustainable long-term. If I were starting this today, I'd explore whether a lightweight AI-powered workflow could replace the rigid rule-based structure, so content updates wouldn't require manual adjustment every time.</p>
+      <p>The chatbot worked, but looking back, the biggest limitation wasn't the flow or the conversion numbers; it was maintenance. Every time the product changed, the conversation content had to be manually updated across the entire flow, which created an ongoing dependency on someone to keep the agent accurate, not sustainable long-term. If I were starting this today, I'd explore whether a lightweight AI-powered workflow could replace the rigid rule-based structure, so content updates wouldn't require manual adjustment every time.</p>
+      </div>
       </div>
     </div>
   </section>
@@ -540,124 +795,358 @@ footer .center-link{font-size:var(--text-sm);font-weight:600;}
   <section id="page-expense-app" class="page case-page home-inner" hidden>
     <a class="back-link" href="#">← All cases</a>
     <div class="case-head">
-      <div class="case-icon ci-amber"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M152,120H136V56h8a32,32,0,0,1,32,32,8,8,0,0,0,16,0,48.05,48.05,0,0,0-48-48h-8V24a8,8,0,0,0-16,0V40h-8a48,48,0,0,0,0,96h8v64H104a32,32,0,0,1-32-32,8,8,0,0,0-16,0,48.05,48.05,0,0,0,48,48h16v16a8,8,0,0,0,16,0V216h16a48,48,0,0,0,0-96Zm-40,0a32,32,0,0,1,0-64h8v64Zm40,80H136V136h16a32,32,0,0,1,0,64Z"/></svg></div>
       <h1>Personal expense app</h1>
     </div>
-    <p class="case-meta">0→1 build · live demo</p>
 
-    <div class="case-body">
+    <div class="case-body" data-case-body>
       <h2>Overview</h2>
-      <p>A personal finance app built end-to-end — budgets, transactions, and goal tracking in one place — meant to help someone actually hit a financial goal instead of losing track of it in a spreadsheet.</p>
-      <a class="external" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener" style="font-size:.95rem;font-weight:600;">Try the live demo →</a>
+      <p>A personal finance app built end-to-end (budgets, transactions, and goal tracking in one place), meant to help someone actually hit a financial goal instead of losing track of it in a spreadsheet.</p>
+      <a class="external demo-link" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener">Try the live demo</a>
     </div>
   </section>
 
-</div>
+</main>
 
 <footer>
   <span class="owner">Yen Tran</span>
-  <a class="center-link" href="#">All cases</a>
 </footer>
 
 <script>
 (function(){
+  var header = document.querySelector('header.topbar');
+  new ResizeObserver(function(){ document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px'); }).observe(header);
+  var smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cta = document.querySelector('.cta');
+  new IntersectionObserver(function(entries, obs){
+    if (entries[0].isIntersecting){ cta.classList.add('in-view'); obs.disconnect(); }
+  }, { threshold: .6 }).observe(cta);
+
   /* ---- build collapsible sections + TOC from each case-body's h2 markers ---- */
+  /* supports optional .toc-group / .toc-subgroup wrapper divs (data-label) for
+     grouping h2 sections under a numbered heading, e.g. Approvy's PDD/PRD structure */
   function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
 
   document.querySelectorAll('[data-case-body]').forEach(function(body){
     var toc = body.parentElement.querySelector('[data-toc]');
-    var nodes = Array.prototype.slice.call(body.childNodes);
-    var sections = [];
-    var current = null;
-    nodes.forEach(function(node){
-      if (node.nodeType === 1 && node.tagName === 'H2'){
-        current = { h2: node, content: [] };
-        sections.push(current);
-      } else if (current){
-        current.content.push(node);
-      }
-    });
-    var frag = document.createDocumentFragment();
-    sections.forEach(function(sec, i){
-      var id = slugify(sec.h2.textContent);
-      var details = document.createElement('details');
-      details.id = id;
-      if (i === 0) details.open = true;
-      var summary = document.createElement('summary');
-      summary.textContent = sec.h2.textContent;
-      details.appendChild(summary);
-      var secBody = document.createElement('div');
-      secBody.className = 'sec-body';
-      sec.content.forEach(function(n){ secBody.appendChild(n); });
-      details.appendChild(secBody);
-      frag.appendChild(details);
 
-      if (toc){
-        var a = document.createElement('a');
-        a.href = '#' + id;
-        a.textContent = sec.h2.textContent;
-        a.addEventListener('click', function(ev){
-          ev.preventDefault();
+    if (toc){
+      var controls = document.createElement('div');
+      controls.className = 'toc-controls';
+      var toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      controls.appendChild(toggleBtn);
+      var syncControls = function(){
+        var all = body.querySelectorAll('details:not(.preamble)').length, open = body.querySelectorAll('details[open]:not(.preamble)').length;
+        var allOpen = open === all;
+        toggleBtn.textContent = allOpen ? 'Collapse all' : 'Expand all';
+        toggleBtn.setAttribute('data-act', allOpen ? 'collapse' : 'expand');
+      };
+      toggleBtn.addEventListener('click', function(){
+        var open = toggleBtn.getAttribute('data-act') === 'expand';
+        body.querySelectorAll('details').forEach(function(d){ d.open = open; });
+        syncControls();
+      });
+      body.addEventListener('toggle', syncControls, true);
+    }
+
+    function addTocLabel(text, sub){
+      if (!toc) return;
+      var lbl = document.createElement('div');
+      lbl.className = sub ? 'toc-sublabel' : 'toc-label';
+      lbl.textContent = text;
+      toc.appendChild(lbl);
+    }
+    function addTocLink(text, id, level){
+      if (!toc) return;
+      var a = document.createElement('a');
+      a.href = '#' + id;
+      a.textContent = text;
+      if (level === 1) a.className = 'toc-l1';
+      if (level === 2) a.className = 'toc-l2';
+      a.addEventListener('click', function(ev){
+        ev.preventDefault();
+        var el = document.getElementById(id);
+        if (el){ el.open = true; el.scrollIntoView({behavior: smooth ? 'smooth' : 'auto', block:'start'}); }
+        history.replaceState(null, '', location.pathname + location.search + '#' + id);
+      });
+      toc.appendChild(a);
+    }
+
+    function processContainer(container, level){
+      var nodes = Array.prototype.slice.call(container.childNodes);
+      var newChildren = [];
+      var i = 0;
+      while (i < nodes.length){
+        var node = nodes[i];
+        if (node.nodeType === 1 && node.tagName === 'H2'){
+          var h2 = node;
+          var content = [];
+          i++;
+          while (i < nodes.length && !(nodes[i].nodeType === 1 && (nodes[i].tagName === 'H2' || nodes[i].classList.contains('toc-group') || nodes[i].classList.contains('toc-subgroup')))){
+            content.push(nodes[i]);
+            i++;
+          }
+          var id = slugify(h2.textContent);
+          var details = document.createElement('details');
+          details.id = id;
           details.open = true;
-          details.scrollIntoView({behavior:'smooth', block:'start'});
-          history.replaceState(null, '', location.pathname + location.search + '#' + id);
-        });
-        toc.appendChild(a);
+          var summary = document.createElement('summary');
+          var sectionHeading = document.createElement('h2');
+          sectionHeading.textContent = h2.textContent;
+          summary.appendChild(sectionHeading);
+          details.appendChild(summary);
+          var secBody = document.createElement('div');
+          secBody.className = 'sec-body';
+          content.forEach(function(n){ secBody.appendChild(n); });
+          details.appendChild(secBody);
+          newChildren.push(details);
+          addTocLink(h2.textContent, id, level);
+          continue;
+        }
+        if (node.nodeType === 1 && (node.classList.contains('toc-group') || node.classList.contains('toc-subgroup'))){
+          var isSub = node.classList.contains('toc-subgroup');
+          addTocLabel(node.getAttribute('data-label') || '', isSub);
+          var groupLabel = document.createElement('div');
+          groupLabel.className = isSub ? 'group-label sub' : 'group-label';
+          groupLabel.textContent = node.getAttribute('data-label') || '';
+          processContainer(node, isSub ? 2 : 1);
+          node.insertBefore(groupLabel, node.firstChild);
+          newChildren.push(node);
+          i++;
+          continue;
+        }
+        newChildren.push(node);
+        i++;
       }
-    });
-    body.innerHTML = '';
-    body.appendChild(frag);
+      container.innerHTML = '';
+      newChildren.forEach(function(c){ container.appendChild(c); });
+    }
+
+    processContainer(body, 0);
+    if (typeof controls !== 'undefined' && toc){ body.insertBefore(controls, body.firstChild); syncControls(); }
+    var casePage = body.closest('.page'), caseHead = casePage && casePage.querySelector('.case-head');
+    if (caseHead){
+      /* every case shows one "role, outcome, proof" line under its title (same text as the home list) */
+      var caseId = casePage.id.replace('page-', '');
+      var homeRow = document.querySelector('a.case-row[href="#' + caseId + '"]');
+      var mins = Math.max(1, Math.round(body.textContent.trim().split(/\s+/).length / 220));
+      var homeMeta = homeRow && homeRow.querySelector('.meta');
+      var parts = [];
+      if (homeMeta) parts = homeMeta.textContent.split(' \u00b7 ');
+      if (mins > 1) parts.push(mins + ' min read');
+      if (parts.length){
+        var tags = document.createElement('ul');
+        tags.className = 'case-tags';
+        tags.setAttribute('aria-label', 'Case summary');
+        parts.forEach(function(t){ var li = document.createElement('li'); li.textContent = t; tags.appendChild(li); });
+        caseHead.appendChild(tags);
+      }
+    }
+    if (casePage){
+      var order = ['expense-app', 'approvy', 'chatbot'], at = order.indexOf(casePage.id.replace('page-', '')), nextId = order[at + 1];
+      var nextRow = nextId && document.querySelector('a.case-row[href="#' + nextId + '"] .title');
+      var nextLink = document.createElement('a');
+      nextLink.className = 'next-case';
+      nextLink.href = nextRow ? '#' + nextId : '#';
+      nextLink.innerHTML = '<small></small><span></span>';
+      nextLink.querySelector('small').textContent = nextRow ? 'Next case' : 'Keep exploring';
+      nextLink.querySelector('span').textContent = (nextRow ? nextRow.textContent : 'All cases');
+      casePage.appendChild(nextLink);
+    }
+
+    if (toc){
+      var mob = document.createElement('details');
+      mob.className = 'toc-mobile';
+      mob.innerHTML = '<summary>Contents</summary>';
+      var list = document.createElement('nav');
+      list.setAttribute('aria-label', 'Contents');
+      Array.prototype.forEach.call(toc.children, function(el){
+        if (el.classList.contains('toc-controls')) return;
+        var c = el.cloneNode(true);
+        c.removeAttribute('class');
+        c.className = el.className.replace(/\btoc-l[12]\b/, '').trim();
+        list.appendChild(c);
+      });
+      list.addEventListener('click', function(e){ if (e.target.closest('a')) mob.open = false; });
+      mob.appendChild(list);
+      body.parentElement.parentElement.insertBefore(mob, body.parentElement);
+    }
   });
 
-  /* ---- scrollspy: highlight active TOC link ---- */
+  /* ---- scrollspy: highlight the last section whose top has passed the sticky bars ---- */
   document.querySelectorAll('[data-toc]').forEach(function(toc){
     var links = Array.prototype.slice.call(toc.querySelectorAll('a'));
+    var secs = Array.prototype.slice.call(toc.parentElement.querySelectorAll('.case-body details[id]'));
     if (!links.length) return;
-    var observer = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if (!entry.isIntersecting) return;
-        var id = entry.target.id;
-        links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#' + id); });
-      });
-    }, { rootMargin: '-10% 0px -70% 0px' });
-    toc.parentElement.querySelectorAll('.case-body > details').forEach(function(d){ observer.observe(d); });
+    var ticking = false;
+    function spy(){
+      ticking = false;
+      var mob = toc.parentElement.parentElement.querySelector('.toc-mobile');
+      var tocShown = toc.offsetParent !== null, mobShown = !!mob && mob.offsetParent !== null;
+      if (!tocShown && !mobShown) return;
+      var line = tocShown ? (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'), 10) || 82) + 80 : 110;
+      var cur = null;
+      secs.forEach(function(d){ if (d.getBoundingClientRect().top <= line) cur = d; });
+      if (tocShown) links.forEach(function(a){ a.classList.toggle('active', !!cur && a.getAttribute('href') === '#' + cur.id); });
+      if (mobShown){
+        var curTitle = cur && cur.querySelector(':scope > summary');
+        var txt = curTitle ? 'Contents \u00b7 ' + curTitle.textContent : 'Contents';
+        var sum = mob.querySelector('summary');
+        if (sum.textContent !== txt) sum.textContent = txt;
+      }
+    }
+    window.addEventListener('scroll', function(){ if (!ticking){ ticking = true; requestAnimationFrame(spy); } }, { passive: true });
+    window.addEventListener('hashchange', spy);
+    spy();
   });
 
   /* ---- image lightbox ---- */
-  var lightbox = null;
-  function openLightbox(src, alt){
+  var lightbox = null, opener = null;
+  function openLightbox(img){
+    opener = img;
     lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
-    lightbox.innerHTML = '<span class="lb-close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></span><img src="' + src + '" alt="">';
-    lightbox.addEventListener('click', closeLightbox);
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.setAttribute('aria-label', img.alt || 'Enlarged image');
+    lightbox.innerHTML = '<button type="button" class="lb-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>';
+    var big = document.createElement('img');
+    big.src = img.dataset.full || img.src;
+    big.alt = img.alt;
+    lightbox.appendChild(big);
+    var hint = document.createElement('span');
+    hint.className = 'lb-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.textContent = 'Click the image for actual size';
+    lightbox.appendChild(hint);
+    lightbox.addEventListener('click', function(e){
+      if (e.target === big){
+        var actual = lightbox.classList.toggle('actual');
+        hint.textContent = actual ? 'Click the image to fit the screen' : 'Click the image for actual size';
+      } else closeLightbox();
+    });
     document.body.appendChild(lightbox);
-    document.addEventListener('keydown', onEsc);
+    document.addEventListener('keydown', onKey);
+    lightbox.querySelector('.lb-close').focus();
   }
   function closeLightbox(){
     if (lightbox){ lightbox.remove(); lightbox = null; }
-    document.removeEventListener('keydown', onEsc);
+    document.removeEventListener('keydown', onKey);
+    if (opener){ opener.focus(); opener = null; }
   }
-  function onEsc(e){ if (e.key === 'Escape') closeLightbox(); }
+  function onKey(e){
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'Tab'){ e.preventDefault(); lightbox.querySelector('.lb-close').focus(); }
+  }
+  document.querySelectorAll('.case-body figure img').forEach(function(img){
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+  });
   document.addEventListener('click', function(e){
     var img = e.target.closest('.case-body figure img');
-    if (img) openLightbox(img.src, img.alt);
+    if (img) openLightbox(img);
+  });
+  document.addEventListener('keydown', function(e){
+    var img = e.target.closest && e.target.closest('.case-body figure img');
+    if (img && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); openLightbox(img); }
   });
 
-  /* ---- page routing ---- */
+  /* ---- page routing: #approvy opens a case, #job-map opens its case and jumps to that section ---- */
   var pages = ['home','approvy','chatbot','expense-app'];
-  function route(){
-    var hash = (location.hash || '').replace('#','');
-    var base = hash.split('#')[0];
-    var target = pages.includes(base) ? base : 'home';
-    pages.forEach(function(p){
-      var el = document.getElementById('page-' + p);
-      if (el) el.hidden = (p !== target);
+  /* ---- playful touches (skipped under reduced motion) ---- */
+  var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!calm){
+    var ring = document.querySelector('.circled .draw'), bookBtn = document.querySelector('.cta-link');
+    if (ring && bookBtn) bookBtn.addEventListener('mouseenter', function(){ ring.style.animation = 'none'; void ring.getBoundingClientRect(); ring.style.animation = ''; });
+  }
+  console.log('%cHi, curious one. Like what you see? Book a call: https://calendly.com/h-yentran21/30min', 'font:600 13px/1.6 sans-serif');
+
+  /* ---- small notices and per-section copy-link buttons ---- */
+  var toastTimer = 0;
+  function showToast(msg){
+    var t = document.querySelector('.toast');
+    if (!t){ t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.remove(); }, 3500);
+  }
+  var linkIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.38,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.7,139.72a40,40,0,0,0,56.58,56.58l9.94-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142,8,8,0,1,0,106.69,154a56,56,0,0,0,76.81-2.26l24.12-24.12A56.08,56.08,0,0,0,207.62,48.38Z"/></svg>';
+  document.querySelectorAll('.case-body details[id]:not(.preamble)').forEach(function(d){
+    var title = d.querySelector(':scope > summary').textContent;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'copy-link';
+    b.setAttribute('aria-label', 'Copy link to ' + title);
+    b.title = 'Copy link to this section';
+    b.innerHTML = linkIcon;
+    b.addEventListener('click', function(){
+      var url = location.href.split('#')[0] + '#' + d.id;
+      var done = function(ok){ showToast(ok ? 'Link copied' : 'Could not copy. Use the address bar after this jump.'); if (!ok) location.hash = d.id; };
+      var legacyCopy = function(){
+        var ta = document.createElement('textarea');
+        ta.value = url; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+        document.body.appendChild(ta); ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) {}
+        ta.remove();
+        done(ok);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(function(){ done(true); }, legacyCopy);
+      else legacyCopy();
     });
-    if (!pages.includes(hash)) return; // deep-link into a section handled by TOC clicks / initial load below
-    window.scrollTo(0,0);
+    d.insertBefore(b, d.querySelector(':scope > summary').nextSibling);
+  });
+
+  /* wide tables scroll inside their own box instead of widening the page */
+  document.querySelectorAll('.case-body table').forEach(function(t){
+    var w = document.createElement('div');
+    w.className = 'table-scroll';
+    w.tabIndex = 0;
+    w.setAttribute('role', 'region');
+    w.setAttribute('aria-label', 'Table, scrolls sideways');
+    t.parentNode.insertBefore(w, t);
+    w.appendChild(t);
+  });
+
+  var routed = false;
+  var skip = document.querySelector('.skip-link');
+  skip.addEventListener('click', function(e){ e.preventDefault(); var m = document.getElementById('main'); m.focus({ preventScroll: true }); window.scrollTo(0, 0); });
+
+  function route(){
+    var hash = decodeURIComponent((location.hash || '').slice(1));
+    var target = 'home', section = null;
+    if (pages.includes(hash)) target = hash;
+    else if (hash){
+      var el = document.getElementById(hash);
+      var page = el && el.closest('.page');
+      if (page){ target = page.id.replace('page-', ''); section = el; }
+      else showToast('That link does not match a page here, so you are on the home page.');
+    }
+    var pageHeading = document.querySelector('#page-' + target + ' h1');
+    document.title = target === 'home' || !pageHeading ? 'Yen Tran | Product' : pageHeading.textContent + ' | Yen Tran';
+    var show = function(){
+      pages.forEach(function(p){
+        var pg = document.getElementById('page-' + p);
+        if (pg) pg.hidden = (p !== target);
+      });
+      if (section){
+        if (section.tagName === 'DETAILS') section.open = true;
+        section.scrollIntoView({block:'start'});
+      } else {
+        window.scrollTo(0,0);
+      }
+    };
+    var cur = pages.filter(function(p){ var e = document.getElementById('page-' + p); return e && !e.hidden; })[0];
+    /* soft cross-fade only when the page itself changes, never on the first load or within-page jumps */
+    if (routed && document.startViewTransition && !calm && cur && cur !== target){
+      var shown = false, once = function(){ if (!shown){ shown = true; show(); } };
+      document.startViewTransition(once);
+      setTimeout(once, 400); /* never let a stalled frame block navigation */
+    } else show();
   }
   window.addEventListener('hashchange', route);
   route();
+  routed = true;
 })();
 </script>
 
