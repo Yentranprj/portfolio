@@ -298,7 +298,7 @@ footer .owner{font-size:var(--text-xs);color:var(--color-text-muted);text-transf
   .case-body details.preamble > summary{min-height:44px;}
   .lightbox .lb-close{width:44px;height:44px;}
   .cta-link{display:inline-flex;align-items:center;min-height:44px;}
-  .case-body .demo-link{display:inline-flex;align-items:center;min-height:44px;}
+  .demo-link{display:inline-flex;align-items:center;min-height:44px;}
   .case-body li > a:first-child{display:inline-block;padding-block:var(--gap-snug);}
   html{scroll-padding-top:calc(44px + var(--gap-stack));}
 }
@@ -351,7 +351,9 @@ footer .owner{font-size:var(--text-xs);color:var(--color-text-muted);text-transf
   font-size:var(--text-xs);font-weight:var(--weight-semibold);color:var(--color-text-muted);text-transform:uppercase;
   letter-spacing:var(--tracking-label);margin:var(--gap-group) 0 var(--gap-inline);
 }
-.case-body .demo-link{font-weight:var(--weight-semibold);}
+.demo-link{font-weight:var(--weight-semibold);}
+.case-head:has(.demo-link){display:flex;flex-direction:column;align-items:flex-start;}
+.case-head .demo-link{order:1;margin-top:var(--gap-snug);} /* stays visible when sections collapse; tags (order 0) come first */
 /* each case page takes its own case color as the accent (lede, links, TOC, markers) */
 #page-approvy{--color-accent:var(--color-case-approvy);}
 #page-expense-app{--color-accent:var(--color-case-expense);}
@@ -798,6 +800,7 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
     <a class="back-link" href="#">← All cases</a>
     <div class="case-head">
       <h1>Personal expense app</h1>
+      <a class="external demo-link" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener">Try the live demo<span class="sr-only"> (opens in new tab)</span></a>
     </div>
 
     <div class="case-layout">
@@ -806,7 +809,6 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
       <div class="toc-group" data-label="1. Problem">
       <h2>Context</h2>
       <p>My money was spread across several accounts, credit cards, digital wallets, and cash. Every tool showed me individual transactions, and none showed what they added up to: what was coming in, what was going out, and whether I was making progress. Consolidating it by hand was tedious enough that it kept slipping.</p>
-      <a class="external demo-link" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener">Try the live demo<span class="sr-only"> (opens in new tab)</span></a>
 
       <h2>First attempt: a spreadsheet</h2>
       <p>I started with a Google Sheet: transactions copied in by hand, a new sheet every month, a new workbook every year. It gave me one place for everything, until maintaining it cost more than it returned:</p>
