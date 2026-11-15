@@ -215,8 +215,8 @@ a.case-row .meta{font-size:var(--text-xs);color:var(--color-text-muted);margin:0
 
 /* footer (shared) */
 footer{max-width:var(--width-case);margin:0 auto;padding-block:var(--gap-stack) var(--gap-group);}
-body:has(#page-home:not([hidden])) footer,body:has(#page-expense-app:not([hidden])) footer{max-width:var(--width-narrow);}
-body:has(#page-home:not([hidden])),body:has(#page-expense-app:not([hidden])){--page-w:var(--width-narrow);} /* top bar lines up with the centered column */
+body:has(#page-home:not([hidden])) footer{max-width:var(--width-narrow);}
+body:has(#page-home:not([hidden])){--page-w:var(--width-narrow);} /* top bar lines up with the centered column */
 footer .owner{font-size:var(--text-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:var(--tracking-label);}
 
 /* case page */
@@ -794,16 +794,157 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
   </section>
 
   <!-- CASE: EXPENSE APP -->
-  <section id="page-expense-app" class="page case-page home-inner" hidden>
+  <section id="page-expense-app" class="page case-page" hidden>
     <a class="back-link" href="#">← All cases</a>
     <div class="case-head">
       <h1>Personal expense app</h1>
     </div>
 
-    <div class="case-body" data-case-body>
-      <h2>Overview</h2>
-      <p>A personal finance app built end-to-end (budgets, transactions, and goal tracking in one place), meant to help someone actually hit a financial goal instead of losing track of it in a spreadsheet.</p>
+    <div class="case-layout">
+      <nav class="toc" data-toc aria-label="Contents"></nav>
+      <div class="case-body" data-case-body>
+      <div class="toc-group" data-label="1. Problem">
+      <h2>Context</h2>
+      <p>My money was spread across several accounts, credit cards, digital wallets, and cash. Every tool showed me individual transactions, and none showed what they added up to: what was coming in, what was going out, and whether I was making progress. Consolidating it by hand was tedious enough that it kept slipping.</p>
       <a class="external demo-link" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener">Try the live demo<span class="sr-only"> (opens in new tab)</span></a>
+
+      <h2>First attempt: a spreadsheet</h2>
+      <p>I started with a Google Sheet: transactions copied in by hand, a new sheet every month, a new workbook every year. It gave me one place for everything, until maintaining it cost more than it returned:</p>
+      <ul>
+        <li><strong>Repetitive entry.</strong> Recurring payments had to be re-entered every month.</li>
+        <li><strong>Missed movements.</strong> Transfers between my own accounts were easy to forget, and cash never went through a card at all.</li>
+        <li><strong>Fragile calculations.</strong> One wrong edit could quietly change a number somewhere else.</li>
+        <li><strong>No continuity.</strong> Comparing years meant linking separate workbooks.</li>
+        <li><strong>No context.</strong> The sheet did not record where a number came from or how it had changed.</li>
+      </ul>
+      <figure>
+        <img src="assets/expense-app/spreadsheet-month.webp" data-full="assets/expense-app/spreadsheet-month.png" alt="Google Sheet monthly tab with a block for each spending category, totals, and a pie chart" width="1400" height="687" loading="lazy" decoding="async">
+        <figcaption>One monthly tab: a block per category, with totals and a pie chart</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/expense-app/spreadsheet-summary.webp" data-full="assets/expense-app/spreadsheet-summary.png" alt="Summary tab of the spreadsheet showing income, expenses, savings, and remaining amount for each month" width="1400" height="793" loading="lazy" decoding="async">
+        <figcaption>The Summary tab: every month side by side</figcaption>
+      </figure>
+      <p>Then I accidentally deleted the 2024 workbook and lost a year of history. That made the risk concrete: a complete financial record should not live in a file that can be changed or deleted without an audit trail.</p>
+
+      <h2>Second attempt: expense apps</h2>
+      <p>The apps I tried were good at capture, with easier categorizing and cleaner summaries. Entry was still largely manual, and bank linking was either unavailable or something I was not comfortable with. More importantly, they did not answer the questions I was trying to answer:</p>
+      <ul>
+        <li>Where did my money go?</li>
+        <li>Am I saving enough, or spending too much?</li>
+        <li>How much of my spending is essential?</li>
+        <li>How long could my emergency fund support me?</li>
+        <li>Is my net worth moving in the right direction?</li>
+      </ul>
+      <p>I did not need a better way to record expenses. I needed to know whether I was making progress toward my goals.</p>
+
+      <h2>The deeper problem</h2>
+      <p>Even with every transaction entered correctly, my totals could still be wrong. Neither the spreadsheet nor the apps understood what each movement represented:</p>
+      <ul>
+        <li>Bank descriptions were cryptic, and weeks later I could not tell what a charge was for.</li>
+        <li>Refunds and cancelled transactions were hard to trace.</li>
+        <li>Money set aside for savings or investments was counted as spending.</li>
+      </ul>
+      </div>
+
+      <div class="toc-group" data-label="2. Approach">
+      <h2>Accounting, not budgeting</h2>
+      <p>I started by wanting a consistent structure that made entry less painful. Learning about the FIRE movement widened the goal: net worth and wealth over time, with charts for income, gains, losses, and expenses tied to my goals. Transactions are the foundation, and the bigger picture is what makes planning possible.</p>
+      <p>That led me to frame the problem as accounting rather than budgeting. Before counting a movement as spending or income, the system has to know where it came from and where it went:</p>
+      <ul>
+        <li>A wallet charge is linked to the bank top-up that funded it.</li>
+        <li>A friend's repayment is linked to the expense it covered.</li>
+        <li>A card payment or budget-pot top-up is a transfer, not new spending.</li>
+      </ul>
+      <p>So the app models the relationships between movements instead of treating every transaction as an isolated row.</p>
+
+      <h2>Design principle: trust before convenience</h2>
+      <p>This is real financial data, so how it enters the system is a product decision. Nothing goes straight into the live database. Every import follows the same steps:</p>
+      <ol>
+        <li>Gather statements and screenshots from each account.</li>
+        <li>Reconcile them with Claude's help.</li>
+        <li>Review the proposed changes as one batch.</li>
+        <li>Record a baseline of the ledger.</li>
+        <li>Commit a script that can undo the batch.</li>
+        <li>Write the changes.</li>
+        <li>Check the ledger against the baseline again.</li>
+      </ol>
+      <p>I chose this over automatic syncing: it is slower, but I can see exactly what changed and reverse it. The public demo follows the same principle. It runs the same code on mock data only, so anyone can explore the product without seeing my records.</p>
+      </div>
+
+      <div class="toc-group" data-label="3. Solution">
+      <h2>What the app does</h2>
+      <figure>
+        <img src="assets/expense-app/demo-dashboard.webp" data-full="assets/expense-app/demo-dashboard.png" alt="Dashboard of the expense app showing months of runway, money in, out and kept, and where it was placed" width="1400" height="900" loading="lazy" decoding="async">
+        <figcaption>The dashboard in the live demo (sample data): months of runway, and where the month's money went</figcaption>
+      </figure>
+      <p>It does two related things. The ledger explains what happened to my money:</p>
+      <ul>
+        <li>Reconciles statements and screenshots in batches</li>
+        <li>Recognizes recurring payments</li>
+        <li>Separates transfers from spending and income</li>
+        <li>Keeps calculations in tested code instead of editable cells</li>
+        <li>Preserves one ledger across years</li>
+        <li>Timestamps every row</li>
+        <li>Keeps a rollback script behind each import</li>
+      </ul>
+      <figure>
+        <img src="assets/expense-app/demo-transactions.webp" data-full="assets/expense-app/demo-transactions.png" alt="Transactions table with categories, income, expense, and fund-in labels, and a recurring tag" width="1400" height="900" loading="lazy" decoding="async">
+        <figcaption>Transactions: income, expenses, and fund movements are labeled separately, and recurring payments are tagged</figcaption>
+      </figure>
+      <p>The planning features help me decide what to do next:</p>
+      <ul>
+        <li>Separates must-have from nice-to-have spending</li>
+        <li>Tracks emergency, sinking, and investment funds</li>
+        <li>Follows sinking-fund goals month by month</li>
+        <li>Estimates emergency-fund runway</li>
+        <li>Tracks net worth and FIRE progress</li>
+        <li>Compares changes year over year</li>
+      </ul>
+      <figure>
+        <img src="assets/expense-app/demo-goals.webp" data-full="assets/expense-app/demo-goals.png" alt="My Goals page showing FIRE goal progress, FIRE velocity, emergency fund runway, and sinking goals" width="1400" height="900" loading="lazy" decoding="async">
+        <figcaption>My Goals: FIRE progress, emergency-fund runway, and sinking goals</figcaption>
+      </figure>
+      </div>
+
+      <div class="toc-group" data-label="4. Impact &amp; Learnings">
+      <h2>What changed day to day</h2>
+      <ul>
+        <li><strong>Monthly entry, not daily.</strong> I export my monthly bank statements and upload screenshots of the transactions. Claude parses them and asks about anything unclear. It takes less than five minutes. It is not fully automated, but I no longer enter transactions daily or reconstruct them later.</li>
+        <li><strong>Safer edits.</strong> One wrong number no longer disrupts the rest of my calculations.</li>
+        <li><strong>A forward view.</strong> I can open the app to see my current financial picture and what might happen next. I am building a feature to estimate when I could retire.</li>
+      </ul>
+
+      <h2>What I learned</h2>
+      <p><strong>The code was the smaller part of the work.</strong> I started in May while working full time, and I am about six and a half months in. Most of that time went into decisions: reconsidering direction, rebuilding what did not hold up, learning new tools, and designing an interface without a polished prototype to start from.</p>
+      <p><strong>Deciding what to show was the hardest design problem.</strong> Which data is primary and which is secondary? What story does the screen tell? Is each metric relevant? Then comes the right chart for it, and every choice of color, layout, size, and calculation has to be easy to read. I did not want an enterprise SaaS product. I wanted something genuinely useful.</p>
+      <p><strong>Building with AI makes a team's value clearer.</strong> Working alone with Claude, I had no one to test my judgment against, and without that check the output drifts toward the generic. I often wished for an engineer or a product designer in the room. It made me skeptical that AI replaces engineers and designers just because it can design and code at the same time.</p>
+
+      <h2>Risks</h2>
+      <ul>
+        <li><strong>Personal data exposure.</strong> There is still a risk of exposing personal information.</li>
+        <li><strong>Scope.</strong> I do not yet know whether this becomes a public product. That would take significant work on compliance, security, and regulation.</li>
+      </ul>
+
+      <h2>Help me test this</h2>
+      <p>The app started as a replacement for a spreadsheet, but it has gradually become an attempt to answer a broader question: can a personal finance tool help me understand where my money is going and whether I am doing enough with it?</p>
+      <p>I built it for myself, so I do not yet know whether it solves a problem other people recognize. I am trying to learn:</p>
+      <ul>
+        <li>Whether people also struggle to combine several financial apps into one picture</li>
+        <li>Whether they are unsure where their money is going</li>
+        <li>Whether they want to track wealth and goals alongside expenses</li>
+        <li>How much review they are willing to do in exchange for more reliable data</li>
+      </ul>
+      <p>The product still needs a name, too. If you have a few minutes, I would love for you to:</p>
+      <ul>
+        <li>Suggest a name and explain why it fits</li>
+        <li>Tell me what landed and what did not</li>
+        <li>Share how you manage money today and what you are aiming for</li>
+      </ul>
+      <p>Every question is optional. I do not ask for exact income, balances, or amounts. Contact details are optional and will only be used if you would like me to follow up.</p>
+      <a class="external demo-link" href="https://tally.so/r/WJE4RL" target="_blank" rel="noopener">Share your feedback<span class="sr-only"> (opens in new tab)</span></a>
+      </div>
+      </div>
     </div>
   </section>
 
