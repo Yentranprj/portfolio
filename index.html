@@ -1129,6 +1129,8 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
       var line = tocShown ? (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'), 10) || 82) + 80 : 110;
       var cur = null;
       secs.forEach(function(d){ if (d.getBoundingClientRect().top <= line) cur = d; });
+      /* a short last section can never scroll up to the line, so at the very bottom the last section wins */
+      if (secs.length && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = secs[secs.length - 1];
       if (tocShown) links.forEach(function(a){ a.classList.toggle('active', !!cur && a.getAttribute('href') === '#' + cur.id); });
       if (mobShown){
         var curTitle = cur && cur.querySelector(':scope > summary');
