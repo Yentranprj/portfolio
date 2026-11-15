@@ -120,6 +120,7 @@ a:hover{text-decoration:underline;}
 [hidden]{display:none!important;}
 
 /* header (shared) */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 .skip-link{position:absolute;left:var(--gap-stack);top:-120px;z-index:60;background:var(--color-text);color:var(--color-bg);border-radius:var(--radius-pill);padding:var(--gap-inline) var(--gap-stack);font-size:var(--text-xs);font-weight:var(--weight-semibold);}
 .skip-link:focus{top:var(--gap-inline);text-decoration:none;}
 main:focus{outline:none;}
@@ -427,12 +428,12 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
 
 <header class="topbar">
   <div class="icon-links">
-    <a href="https://github.com/Yentranprj" target="_blank" rel="noopener">GitHub</a>
-    <a href="https://thoughtterrain.substack.com/" target="_blank" rel="noopener">Blog</a>
-    <a href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener" class="nav-book">Book a call</a>
+    <a href="https://github.com/Yentranprj" target="_blank" rel="noopener">GitHub<span class="sr-only"> (opens in new tab)</span></a>
+    <a href="https://thoughtterrain.substack.com/" target="_blank" rel="noopener">Blog<span class="sr-only"> (opens in new tab)</span></a>
+    <a href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener" class="nav-book">Book a call<span class="sr-only"> (opens in new tab)</span></a>
   </div>
   <div class="right">
-    <a class="cv-chip" href="https://drive.google.com/file/d/116AXSi1CJLTAVDOUFUQx2HHjLnM7Y4kC/view?usp=sharing" target="_blank" rel="noopener">Resume</a>
+    <a class="cv-chip" href="https://drive.google.com/file/d/116AXSi1CJLTAVDOUFUQx2HHjLnM7Y4kC/view?usp=sharing" target="_blank" rel="noopener">Resume<span class="sr-only"> (opens in new tab)</span></a>
     <a class="email-link" href="mailto:h.yentran21@gmail.com">h.yentran21@gmail.com</a>
   </div>
 </header>
@@ -485,7 +486,7 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
     </section>
     <section class="cta">
       <h2 class="cta-line">Let’s <span class="circled">build<svg viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true"><path class="draw" pathLength="1" d="M70 6 C35 2 6 14 5 31 C4 48 34 57 66 55 C98 53 116 42 114 27 C112 12 86 4 52 7"/></svg></span> together!</h2>
-      <a class="cta-link" href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener">Book a call</a>
+      <a class="cta-link" href="https://calendly.com/h-yentran21/30min" target="_blank" rel="noopener">Book a call<span class="sr-only"> (opens in new tab)</span></a>
     </section>
   </section>
 
@@ -719,9 +720,9 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
 
       <h2>References</h2>
       <ul>
-        <li><a href="https://www.figma.com/board/3i8Ld9r1pGDfXc65j5bdCR/Approvy---documenting-project-decisions?node-id=0-1" target="_blank" rel="noopener noreferrer">Product artifacts on Figma (English)</a></li>
-        <li><a href="https://www.figma.com/board/ESX3yCRoQkTKGlWRczQq3q/Team-S%E1%BB%91-M%E1%BB%99t-WorkSpace?node-id=0-1" target="_blank" rel="noopener noreferrer">Product artifacts on Figma (Vietnamese)</a></li>
-        <li><a href="https://www.youtube.com/watch?v=UW8qLgs1o0s" target="_blank" rel="noopener noreferrer">Video presentation</a>: AI-dubbed English audio by default; switch the audio track for Vietnamese.</li>
+        <li><a href="https://www.figma.com/board/3i8Ld9r1pGDfXc65j5bdCR/Approvy---documenting-project-decisions?node-id=0-1" target="_blank" rel="noopener noreferrer">Product artifacts on Figma (English)<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.figma.com/board/ESX3yCRoQkTKGlWRczQq3q/Team-S%E1%BB%91-M%E1%BB%99t-WorkSpace?node-id=0-1" target="_blank" rel="noopener noreferrer">Product artifacts on Figma (Vietnamese)<span class="sr-only"> (opens in new tab)</span></a></li>
+        <li><a href="https://www.youtube.com/watch?v=UW8qLgs1o0s" target="_blank" rel="noopener noreferrer">Video presentation<span class="sr-only"> (opens in new tab)</span></a>: AI-dubbed English audio by default; switch the audio track for Vietnamese.</li>
       </ul>
       </div>
     </div>
@@ -802,7 +803,7 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
     <div class="case-body" data-case-body>
       <h2>Overview</h2>
       <p>A personal finance app built end-to-end (budgets, transactions, and goal tracking in one place), meant to help someone actually hit a financial goal instead of losing track of it in a spreadsheet.</p>
-      <a class="external demo-link" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener">Try the live demo</a>
+      <a class="external demo-link" href="https://personal-expense-app-demo.vercel.app/" target="_blank" rel="noopener">Try the live demo<span class="sr-only"> (opens in new tab)</span></a>
     </div>
   </section>
 
