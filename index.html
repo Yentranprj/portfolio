@@ -1228,7 +1228,8 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
     b.title = 'Copy link to this section';
     b.innerHTML = linkIcon;
     b.addEventListener('click', function(){
-      var url = location.href.split('#')[0] + '#' + d.id;
+      var cs = d.closest('.page'), base = location.href.split('#')[0].replace(/[^\/]*$/, ''); /* share page per case so link previews get its own og:image */
+      var url = base + (cs ? cs.id.replace('page-', '') + '/' : '') + '#' + d.id;
       var done = function(ok){ showToast(ok ? 'Link copied' : 'Could not copy. Use the address bar after this jump.'); if (!ok) location.hash = d.id; };
       var legacyCopy = function(){
         var ta = document.createElement('textarea');
