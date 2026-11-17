@@ -959,6 +959,8 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
 
 <script>
 (function(){
+  /* site root path, captured before routing rewrites the address bar to /approvy/ etc. */
+  var ROOT = location.pathname.replace(/[^\/]*$/, '');
   var header = document.querySelector('header.topbar');
   new ResizeObserver(function(){ document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px'); }).observe(header);
   var smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1159,7 +1161,7 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
     lightbox.setAttribute('aria-label', img.alt || 'Enlarged image');
     lightbox.innerHTML = '<button type="button" class="lb-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>';
     var big = document.createElement('img');
-    big.src = img.dataset.full || img.src;
+    big.src = img.dataset.full ? new URL(img.dataset.full, location.origin + ROOT).href : img.src;
     big.alt = img.alt;
     lightbox.appendChild(big);
     var hint = document.createElement('span');
@@ -1228,8 +1230,8 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
     b.title = 'Copy link to this section';
     b.innerHTML = linkIcon;
     b.addEventListener('click', function(){
-      var cs = d.closest('.page'), base = location.href.split('#')[0].replace(/[^\/]*$/, ''); /* share page per case so link previews get its own og:image */
-      var url = base + (cs ? cs.id.replace('page-', '') + '/' : '') + '#' + d.id;
+      var cs = d.closest('.page'); /* share page per case so link previews get its own og:image */
+      var url = location.origin + ROOT + (cs ? cs.id.replace('page-', '') + '/' : '') + '#' + d.id;
       var done = function(ok){ showToast(ok ? 'Link copied' : 'Could not copy. Use the address bar after this jump.'); if (!ok) location.hash = d.id; };
       var legacyCopy = function(){
         var ta = document.createElement('textarea');
@@ -1263,14 +1265,19 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
 
   function route(){
     var hash = decodeURIComponent((location.hash || '').slice(1));
+    var pm = location.pathname.slice(ROOT.length).match(/^([\w-]+)\/?$/);
     var target = 'home', section = null;
-    if (pages.includes(hash)) target = hash;
+    if (!hash && pm && pages.includes(pm[1])) target = pm[1];
+    else if (pages.includes(hash)) target = hash;
     else if (hash){
       var el = document.getElementById(hash);
       var page = el && el.closest('.page');
       if (page){ target = page.id.replace('page-', ''); section = el; }
       else showToast('That link does not match a page here, so you are on the home page.');
     }
+    /* address bar always shows the shareable path (/approvy/, /approvy/#section) so a copied URL previews its own card */
+    var want = ROOT + (target === 'home' ? '' : target + '/') + (section ? '#' + section.id : '');
+    if (location.pathname + location.hash !== want){ try { history.replaceState(null, '', want); } catch (e) {} }
     var pageHeading = document.querySelector('#page-' + target + ' h1');
     document.title = target === 'home' || !pageHeading ? 'Yen Tran | Product' : pageHeading.textContent + ' | Yen Tran';
     var show = function(){
@@ -1293,7 +1300,16 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
       setTimeout(once, 400); /* never let a stalled frame block navigation */
     } else show();
   }
+  /* href="#" (All cases / Keep exploring) fires no hashchange from /approvy/, so route it ourselves */
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href="#"]');
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+    e.preventDefault();
+    try { history.pushState(null, '', ROOT); } catch (err) { location.hash = ''; }
+    route();
+  });
   window.addEventListener('hashchange', route);
+  window.addEventListener('popstate', route); /* back/forward between /approvy/ and / changes no hash */
   route();
   routed = true;
 })();
