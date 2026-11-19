@@ -961,6 +961,8 @@ body:has(#page-expense-app:not([hidden])) .read-progress{background:var(--color-
 (function(){
   /* site root path, captured before routing rewrites the address bar to /approvy/ etc. */
   var ROOT = location.pathname.replace(/[^\/]*$/, '');
+  /* pin image URLs to the site root now: routing later rewrites the address bar to /approvy/, and a late-loading image would resolve there (404) */
+  document.querySelectorAll('img[src]').forEach(function(i){ i.setAttribute('src', i.src); });
   var header = document.querySelector('header.topbar');
   new ResizeObserver(function(){ document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px'); }).observe(header);
   var smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
